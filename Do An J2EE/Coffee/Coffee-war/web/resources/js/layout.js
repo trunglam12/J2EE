@@ -124,3 +124,15 @@ function countChecked() {
         $('.bulk-actions').hide();
     }
 }
+function addProduct(){ 
+     window.open('./faces/AddProduct.xhtml','mywindow', 'resizable=no,toolbar=no,scrollbars=yes,height=450,width=530,top=145,left=235,menubar=no');
+     return true;
+ }
+ function updateProduct(){ 
+     window.open('./faces/UpdateProduct.xhtml','mywindow', 'resizable=no,toolbar=no,scrollbars=yes,height=450,width=530,top=145,left=235,menubar=no');
+     return true;
+ }
+ function refreshAndClose() {
+        window.opener.location.reload(true);
+        window.close();
+    }

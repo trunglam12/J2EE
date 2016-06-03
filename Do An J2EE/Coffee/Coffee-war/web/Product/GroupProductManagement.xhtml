@@ -1,0 +1,148 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+  
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+
+    <ui:composition template="/WEB-INF/templates/template.xhtml">
+        <ui:define name="content">
+
+            <h3 class="form-title-product">Quản lý nhóm sản phẩm</h3>
+
+            <a4j:commandButton class="btn btn-default" value="Thêm Sản Nhóm Sản Phẩm Mới" 
+                               oncomplete="#{rich:component('popupaddgroup')}.show()"> 
+            </a4j:commandButton>
+            <br></br><br></br>
+            <h:form id="form">
+                <rich:dataTable  class="table table-striped" value="#{groupProductManagedBean.GetAllGroupProduct()}" 
+                                 var="group" id="tableGroupProduct" rows="10">
+                    <rich:column>    				
+                        <f:facet name="header">Mã Nhóm Sản Phẩm</f:facet>    	        
+                        <h:outputText value="#{group.groupId}"  />
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Tên Nhóm Sản Phẩm</f:facet>
+                        <h:outputText value="#{group.groupName}"   />
+                    </rich:column>
+                    
+                    <rich:column>
+                        <f:facet name="header">Cập nhật</f:facet>
+                        <a4j:commandButton class="btn btn-default" value="Cập nhật" execute="@this" resetValues="true" 
+                                           action="#{groupProductManagedBean.GetGroupProduct(group)}"
+                               render="groupName"         
+                               oncomplete="#{rich:component('popupUpdateGroup')}.show()"> 
+                         
+                       
+                        </a4j:commandButton>
+                    </rich:column>
+                    <rich:column>
+                        <f:facet name="header">Xóa</f:facet>
+                        <a4j:commandButton class="btn btn-default" value="Xóa" execute="@this" resetValues="true" 
+                                      action="#{groupProductManagedBean.GetGroupProduct(group)}"
+                                               
+                                          oncomplete="#{rich:component('confirmPane')}.show()"> 
+                                       
+                        </a4j:commandButton>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller page="#{groupProductManagedBean.page}" fastStep="3"/>
+                    </f:facet>
+                </rich:dataTable>
+                </h:form>
+            <h:form>
+                  <rich:popupPanel id="confirmPane" autosized="true">
+                            <f:facet name="header">
+                          <h:outputText value="Xóa sản phẩm" />
+                      </f:facet>
+                      <f:facet name="controls">
+                          <h:outputLink value="#" onclick="#{rich:component('confirmPane')}.hide(); return false;" style="color: inherit">
+                              X
+                          </h:outputLink>
+                      </f:facet>
+                        
+                    Bạn có muốn xóa sản phẩm này không?
+                    <a4j:commandButton value="Không" onclick="#{rich:component('confirmPane')}.hide(); return false;" />
+                    <a4j:commandButton value="Có" action="#{groupProductManagedBean.RemoveGroup()}"
+                                       render="tableGroupProduct" execute="confirmPane"
+                                       oncomplete="if (#{facesContext.validationFailed==false}) 
+                                       #{rich:component('confirmPane')}.hide();"/>
+                     </rich:popupPanel>
+                </h:form>
+                <h:form>
+                <rich:popupPanel id="popupUpdateGroup"  domElementAttachment="parent" autosized="true" resizeable="false">
+                    <f:facet name="header">
+                        <h:outputText value="Cập nhật sản phẩm" />
+                    </f:facet>
+                    <f:facet name="controls">
+                        <h:outputLink value="#" onclick="#{rich:component('popupUpdateGroup')}.hide(); return false;" style="color: inherit">
+                            X
+                        </h:outputLink>
+                    </f:facet>                   
+                    <center>
+                            <h1 class="form-title-product">Cập nhật nhóm sản phẩm</h1>
+                            <h:panelGrid columns="3" class="panel-collapse" id="updateProductGrid">
+                                <div class="form-group">
+                                    <label class="form-label-product">Tên nhóm Sản Phẩm :</label>
+                                    <div class="col-md-10">
+                                        <h:inputText id="groupName" required="true" validatorMessage="Tên nhóm không hợp lệ! " requiredMessage="Tên nhóm sản phẩm là bắt buộc phải nhập!" value="#{groupProductManagedBean.groupProduct.groupName}" class= "form-control"/>
+                                          <rich:message id="groupNameMsg" for="groupName" />
+                                    </div>
+                                </div>
+                              
+                            </h:panelGrid>
+                            <br></br><br></br>
+                         
+                            <a4j:commandButton value="Cập nhật" action="#{groupProductManagedBean.EditGroup()}"  class="btn btn-default" render="tableGroupProduct" execute="popupUpdateGroup"
+                                               oncomplete="if (#{facesContext.validationFailed==false}) 
+                                                      #{rich:component('popupUpdateGroup')}.hide();">
+                            </a4j:commandButton>
+                            <h:commandButton style="margin-left: 25px" value="Hủy bỏ"  onclick="#{rich:component('popupUpdateGroup')}.hide(); return false;" class="btn btn-default"/>
+                            <br></br>
+                      </center>
+                        
+                </rich:popupPanel>
+            </h:form>
+
+            <rich:popupPanel id="popupaddgroup" modal="false" autosized="true" resizeable="false">
+                <f:facet name="header">
+                    <h:outputText value="Thêm mới nhóm sản phẩm" />
+                </f:facet>
+                <f:facet name="controls">
+                    <h:outputLink value="#" onclick="#{rich:component('popupaddgroup')}.hide(); return false;" style="color: inherit">
+                        X
+                    </h:outputLink>
+                </f:facet>
+                <center>
+                    <h:form>
+                        <h1 class="form-title-product"> Thêm mới nhóm sản phẩm</h1>
+                        <h:panelGrid columns="3" class="panel-collapse" id="addGroupGrid">
+                            <div class="form-group">
+                                <label class="form-label-product">Tên nhóm Sản Phẩm :</label>
+                                <div class="col-md-10">
+                                    <h:inputText id="groupName" required="true" requiredMessage="Tên nhóm sản phẩm là bắt buộc phải nhập!" value="#{groupProductManagedBean.groupProduct.groupName}" class= "form-control"/>
+                                     <rich:message id="groupNameMsg" for="groupName" />
+                                </div>
+                            </div>
+                           
+                        </h:panelGrid>
+                        <br></br><br></br>
+                        
+                        <a4j:commandButton value="Thêm mới" action="#{groupProductManagedBean.AddGroup()}"  class="btn btn-default" 
+                                            render="tableGroupProduct" execute="popupaddgroup"
+                                            oncomplete="if (#{facesContext.validationFailed==false})  {#{rich:component('popupaddgroup')}.hide();}" />
+                        
+                        <h:commandButton style="margin-left: 25px" value="Hủy bỏ"  onclick="#{rich:component('popupaddgroup')}.hide(); return false;" class="btn btn-default"/>
+                       
+                    </h:form>
+                </center>
+            </rich:popupPanel>
+        </ui:define>
+    </ui:composition>
+
+
+</html>

@@ -1,0 +1,225 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+  
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+
+    <ui:composition template="/WEB-INF/templates/template.xhtml">
+        <ui:define name="content">
+
+            <h3 class="form-title-product">Quản lý sản phẩm</h3>
+
+            <a4j:commandButton class="btn btn-default" value="Thêm Sản Phẩm Mới" 
+                               oncomplete="#{rich:component('popupaddproduct')}.show()"> 
+            </a4j:commandButton>
+            <br></br>
+            <h:form id="form">
+                <rich:dataTable  class="table table-striped" value="#{productManagedBean.GetAllProduct()}" 
+                                 var="product" iterationStatusVar="it" id="tableProduct" rows="10">
+                    <rich:column>    				
+                        <f:facet name="header">Tên sản phẩm</f:facet>    	        
+                        <h:outputText value="#{product.productName}"  />
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Số lượng</f:facet>
+                        <h:outputText value="#{product.count}"   />
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Giá</f:facet>
+
+                        <h:outputText value="#{product.price}"  />
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Cập nhật</f:facet>
+                        <a4j:commandButton class="btn btn-default" value="Cập nhật" execute="@this" resetValues="true" 
+                                           action="#{productManagedBean.GetProduct(product)}"
+                               render="updateProductGrid price count productName groupProduct unitProduct"         
+                               oncomplete="#{rich:component('popupUpdateProduct')}.show()"> 
+                         
+                       
+                        </a4j:commandButton>
+                    </rich:column>
+                    <rich:column>
+                        <f:facet name="header">Xóa</f:facet>
+                        <a4j:commandButton class="btn btn-default" value="Xóa" execute="@this" resetValues="true" 
+                                       action="#{productManagedBean.GetProduct(product)}"
+                                               
+                                          oncomplete="#{rich:component('confirmPane')}.show()"> 
+                                       
+                        </a4j:commandButton>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller page="#{productManagedBean.page}" fastStep="3"/>
+                    </f:facet>
+                </rich:dataTable>
+                </h:form>
+            <h:form>
+                  <rich:popupPanel id="confirmPane" autosized="true">
+                            <f:facet name="header">
+                          <h:outputText value="Xóa sản phẩm" />
+                      </f:facet>
+                      <f:facet name="controls">
+                          <h:outputLink value="#" onclick="#{rich:component('confirmPane')}.hide(); return false;" style="color: inherit">
+                              X
+                          </h:outputLink>
+                      </f:facet>
+                        
+                    Bạn có muốn xóa sản phẩm này không?
+                    <a4j:commandButton value="Không" onclick="#{rich:component('confirmPane')}.hide(); return false;" />
+                    <a4j:commandButton value="Có" action="#{productManagedBean.DeleteProduct()}"
+                                       render="tableProduct" execute="confirmPane"
+                                       oncomplete="if (#{facesContext.validationFailed==false}) 
+                                       #{rich:component('confirmPane')}.hide();"/>
+                     </rich:popupPanel>
+                </h:form>
+                <h:form>
+                <rich:popupPanel id="popupUpdateProduct"  domElementAttachment="parent" autosized="true" resizeable="false">
+                    <f:facet name="header">
+                        <h:outputText value="Cập nhật sản phẩm" />
+                    </f:facet>
+                    <f:facet name="controls">
+                        <h:outputLink value="#" onclick="#{rich:component('popupUpdateProduct')}.hide(); return false;" style="color: inherit">
+                            X
+                        </h:outputLink>
+                    </f:facet>                   
+                    <center>
+                            <h1 class="form-title-product">Cập nhật sản phẩm</h1>
+                            <h:panelGrid columns="3" class="panel-collapse" id="updateProductGrid">
+                                <div class="form-group">
+                                    <label class="form-label-product">Tên Sản Phẩm :</label>
+                                    <div class="col-md-10">
+                                        <h:inputText id="productName" required="true" validatorMessage="Tên sản phẩm không hợp lệ! " requiredMessage="Tên sản phẩm là bắt buộc phải nhập!" value="#{productManagedBean.product.productName}" class= "form-control"/>
+                                          <rich:message id="productNameMsg" for="productName" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label-product"> Giá          : </label>
+                                    <div class="col-md-10">
+                                        <h:inputText id="price" required="true" validatorMessage="Giá sản phẩm không hợp lệ!" requiredMessage="Giá là bắt buộc phải nhập!" value="#{productManagedBean.product.price}" 
+                                                     class = "form-control" converterMessage="Giá sản phẩm là kiểu số."/> 
+                                       <rich:message id="priceMsg" for="price" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label-product">Số lượng     :</label>
+                                    <div class="col-md-10">
+                                        <h:inputText id="count" required="true" validatorMessage="Số lượng không hợp lệ" requiredMessage="Số lượng là bắt buộc phải nhập!" value="#{productManagedBean.product.count}" class = "form-control"
+                                                     converterMessage="Số lượng là kiểu số."/> 
+                                           <rich:message id="countMsg" for="count" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label-product"> Loại Sản phẩm:</label>
+                                    <div class="col-md-10">
+                                        <h:selectOneMenu id="groupProduct" value="#{productManagedBean.groupProduct.groupId}" class="form-control">
+                                            <f:selectItems value="#{productManagedBean.GetAllGroupProduct()}" var="group" itemLabel="#{group.groupName}" itemValue="#{group.groupId}" />
+                                        </h:selectOneMenu>
+                                        <rich:message id="groupProductMsg" for="groupProduct" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label-product">Đơn vị của sản phẩm:</label>
+                                    <div class="col-md-10">
+                                        <h:selectOneMenu id="unitProduct" value="#{productManagedBean.unit.unitId}" class="form-control">
+                                            <f:selectItems value="#{productManagedBean.GetAllUnit()}" var="unit" itemLabel="#{unit.unitName}" itemValue="#{unit.unitId}" />
+                                        </h:selectOneMenu>
+                                        <rich:message id="unitProductMsg" for="unitProduct" />
+                                    </div>
+                                </div>
+                            </h:panelGrid>
+                            <br></br><br></br>
+                         
+                            <a4j:commandButton value="Cập nhật" action="#{productManagedBean.EditProduct()}"  class="btn btn-default" render="tableProduct" execute="popupUpdateProduct"
+                                               oncomplete="if (#{facesContext.validationFailed==false}) 
+                                                      #{rich:component('popupUpdateProduct')}.hide();">
+                            </a4j:commandButton>
+                            <h:commandButton style="margin-left: 25px" value="Hủy bỏ"  onclick="#{rich:component('popupUpdateProduct')}.hide(); return false;" class="btn btn-default"/>
+                            <br></br>
+                      </center>
+                        
+                </rich:popupPanel>
+            </h:form>
+
+            <rich:popupPanel id="popupaddproduct" modal="false" autosized="true" resizeable="false">
+                <f:facet name="header">
+                    <h:outputText value="Thêm mới sản phẩm" />
+                </f:facet>
+                <f:facet name="controls">
+                    <h:outputLink value="#" onclick="#{rich:component('popupaddproduct')}.hide(); return false;" style="color: inherit">
+                        X
+                    </h:outputLink>
+                </f:facet>
+
+                <center>
+                  
+
+                    <h:form>
+                        <h1 class="form-title-product"> Thêm mới sản phẩm</h1>
+                        <h:panelGrid columns="3" class="panel-collapse" id="addProductPanel">
+                            <div class="form-group">
+                                <label class="form-label-product">Tên Sản Phẩm :</label>
+                                <div class="col-md-10">
+                                    <h:inputText id="productName" required="true" requiredMessage="Tên sản phẩm là bắt buộc phải nhập!" value="#{productManagedBean.insProduct.productName}" class= "form-control"/>
+                                     <rich:message id="productNameMsg" for="productName" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label-product"> Giá          : </label>
+                                <div class="col-md-10">
+                                    <h:inputText id="price" value="#{productManagedBean.insProduct.price}" required="true" requiredMessage="giá là bắt buộc phải nhập!" class = "form-control" converterMessage="Price is number."/>  
+                                      <rich:message id="priceMsg" for="price" />
+                                </div>
+                            </div>                          
+                            <div class="form-group">
+                                <label class="form-label-product">Số lượng     :</label>
+                                <div class="col-md-10">
+                                    <h:inputText id="count" value="#{productManagedBean.insProduct.count}" required="true" requiredMessage="số lượng là bắt buộc phải nhập!" class = "form-control" converterMessage="count is number."/> 
+                                     <rich:message id="countMsg" for="count" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label-product"> Loại Sản phẩm:</label>
+                                <div class="col-md-10">
+                                    <h:selectOneMenu id="groupProduct" value="#{productManagedBean.groupProduct.groupId}" class="form-control">
+                                        <f:selectItems value="#{productManagedBean.GetAllGroupProduct()}" var="group" itemLabel="#{group.groupName}" itemValue="#{group.groupId}" />
+                                    </h:selectOneMenu>
+                                      <rich:message id="groupProductMsg" for="groupProduct" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label-product">Đơn vị của sản phẩm:</label>
+                                <div class="col-md-10">
+                                    <h:selectOneMenu id="unitProduct" value="#{productManagedBean.unit.unitId}" class="form-control">
+                                        <f:selectItems value="#{productManagedBean.GetAllUnit()}" var="unit" itemLabel="#{unit.unitName}" itemValue="#{unit.unitId}" />
+                                    </h:selectOneMenu>
+                                     <rich:message id="unitProductMsg" for="unitProduct" />
+                                </div>
+                            </div>
+                        </h:panelGrid>
+                        <br></br><br></br>
+                        
+                         <a4j:commandButton value="Thêm mới" action="#{productManagedBean.AddProduct()}"  class="btn btn-default" 
+                                            render="tableProduct" execute="popupaddproduct"
+                                             oncomplete="if (#{facesContext.validationFailed==false})  {#{rich:component('popupaddproduct')}.hide();}" />
+                        
+                        <h:commandButton style="margin-left: 25px" value="Hủy bỏ"  onclick="#{rich:component('popupaddproduct')}.hide(); return false;" class="btn btn-default"/>
+                       
+                    </h:form>
+                </center>
+            </rich:popupPanel>
+
+
+
+        </ui:define>
+    </ui:composition>
+
+
+</html>

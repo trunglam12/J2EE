@@ -17,7 +17,7 @@
         <h:outputScript name="js/layout.js"/>
         <title>Coffee shop</title>
     </h:head>
-
+    <h:form>
     <h:body class="nav-md">
         <div class="container body">
             <div class="main_container">
@@ -36,16 +36,20 @@
                                 <h3>General</h3>
                                 <ul class="nav side-menu">
                                     <li>
-                                        <a><i class="fa fa-home"></i>Catalog <span class="fa fa-chevron-down"></span></a>
+                                        <a><i class="fa fa-home"></i>Sản phẩm<span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li>
-                                                <a href="#">Place Holder</a>
+                                                <h:commandLink action="/Product/ProductManagement?faces-redirect=true" value="Quản lý sản phẩm"/>
+                                             
                                             </li>
                                             <li>
-                                                <a href="#">Place Holder</a>
+                                               
+                                                 <h:commandLink action="/Product/GroupProductManagement?faces-redirect=true" value="Quản lý nhóm sản phẩm"/>
+                                             
                                             </li>
                                             <li>
-                                                <a>Place Holder<span class="fa fa-chevron-down"></span></a>
+                                                <h:commandLink action="/Product/UnitManagement?faces-redirect=true" value="Quản lý đơn vị sản phẩm"/>
+                                               
                                                 <ul class="nav child_menu">
                                                     <li class="sub_menu">
                                                         <a href="#">Place Holder</a>
@@ -61,10 +65,11 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
+                                        <a><i class="fa fa-edit"></i> Bàn <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li>
-                                                <a href="#">General Form</a>
+                                                 <h:commandLink action="/Table/TableManagement?faces-redirect=true" value=" Quản lý danh sách bàn"/>
+                                               
                                             </li>
                                             <li>
                                                 <a href="#">Advanced Components</a>
@@ -285,5 +290,7 @@
                 <!-- /footer content -->
             </div>
         </div>
+        
     </h:body>
+        </h:form>
 </html>

@@ -1,0 +1,201 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+  
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+
+    <ui:composition template="/WEB-INF/templates/template.xhtml">
+        <ui:define name="content">
+
+            <h3 class="form-title-product">Quản lý danh sách bàn</h3>
+
+            <a4j:commandButton class="btn btn-default" value="Thêm bàn Mới" 
+                               oncomplete="#{rich:component('popupaddTable')}.show()"> 
+            </a4j:commandButton>
+            <br></br><br></br>
+            <h:form id="form">
+                <rich:dataTable  class="table table-striped" value="#{tableManagedBean.GetAllTable()}" 
+                                 var="table" id="tableTable" rows="10">
+                    <rich:column>    				
+                        <f:facet name="header">Mã Bàn</f:facet>    	        
+                        <h:outputText value="#{table.tableId}"  />
+                    </rich:column>
+
+                      <rich:column>
+                        <f:facet name="header">Tên Bàn</f:facet>
+                        <h:outputText value="#{table.tableName}"   />
+                    </rich:column>
+                    
+                       <rich:column>
+                        <f:facet name="header">Trạng Thái</f:facet>
+                        <h:outputText value="#{tableManagedBean.GetStatus(table.status)}"  />
+                    </rich:column>
+                    
+                       <rich:column>
+                        <f:facet name="header">Danh sách món đã gọi</f:facet>
+                        <h:outputText value="#{table.productIds}"  />
+                    </rich:column>
+                    
+                    <rich:column>
+                        <f:facet name="header">Cập nhật</f:facet>
+                        <a4j:commandButton class="btn btn-default" value="Cập nhật" execute="@this" resetValues="true" 
+                                           action="#{tableManagedBean.GetTable(table)}"            
+                                           render="tableName tableStatus ProductListId"         
+                               oncomplete="#{rich:component('popupUpdateTable')}.show()"> 
+                         
+                       
+                        </a4j:commandButton>
+                    </rich:column>
+                    <rich:column>
+                        <f:facet name="header">Xóa</f:facet>
+                        <a4j:commandButton class="btn btn-default" value="Xóa" execute="@this" resetValues="true" 
+                                        action="#{tableManagedBean.GetTable(table)}"       
+                                               
+                                          oncomplete="#{rich:component('confirmPane')}.show()"> 
+                                       
+                        </a4j:commandButton>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller page="#{tableManagedBean.page}" fastStep="3"/>
+                    </f:facet>
+                </rich:dataTable>
+                </h:form>
+            <h:form>
+                  <rich:popupPanel id="confirmPane" autosized="true">
+                            <f:facet name="header">
+                          <h:outputText value="Xóa bàn" />
+                      </f:facet>
+                      <f:facet name="controls">
+                          <h:outputLink value="#" onclick="#{rich:component('confirmPane')}.hide(); return false;" style="color: inherit">
+                              X
+                          </h:outputLink>
+                      </f:facet>
+                        
+                    Bạn có muốn xóa bàn này không?
+                    <a4j:commandButton value="Không" onclick="#{rich:component('confirmPane')}.hide(); return false;" />
+                    <a4j:commandButton value="Có" action="#{tableManagedBean.RemoveTable()}"
+                                       render="tableTable" execute="confirmPane"
+                                       oncomplete="if (#{facesContext.validationFailed==false}) 
+                                       #{rich:component('confirmPane')}.hide();"/>
+                     </rich:popupPanel>
+                </h:form>
+                <h:form>
+                <rich:popupPanel id="popupUpdateTable"  domElementAttachment="parent" autosized="true" resizeable="false">
+                    <f:facet name="header">
+                        <h:outputText value="Cập nhật thông tin bàn" />
+                    </f:facet>
+                    <f:facet name="controls">
+                        <h:outputLink value="#" onclick="#{rich:component('popupUpdateTable')}.hide(); return false;" style="color: inherit">
+                            X
+                        </h:outputLink>
+                    </f:facet>                   
+                    <center>
+                            <h1 class="form-title-product">Cập nhật thông tin bàn</h1>
+                            <h:panelGrid columns="3" class="panel-collapse" id="updateTableGrid">
+                                <div class="form-group">
+                                    <label class="form-label-product">Tên bàn :</label>
+                                    <div class="col-md-10">
+                                        <h:inputText id="tableName" required="true" validatorMessage="Tên bàn không hợp lệ! " 
+                                        requiredMessage="Tên bàn là bắt buộc phải nhập!" value="#{tableManagedBean.table.tableName}"
+                                        class= "form-control"/>
+                                          <rich:message id="tableNameMsg" for="tableName" />
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="form-label-product">Trạng thái :</label>
+                                    <div class="col-md-10">
+                                        <h:selectOneMenu id="tableStatus" class= "form-control" value="#{tableManagedBean.table.status}">
+                                            <f:selectItem  itemValue="true" itemLabel="Còn trống" />
+                                              <f:selectItem itemValue="false" itemLabel="Đã có người ngồi!" />	
+                                        </h:selectOneMenu>
+                                         <rich:message id="tableStatusMsg" for="tableStatus" />
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label-product">Danh sách món đã gọi :</label>
+                                    <div class="col-md-10">
+                                        <h:inputText id="ProductListId" class="form-control"  value="#{tableManagedBean.table.productIds}"/>
+                                          <rich:message id="ProductListIdMsg" for="ProductListId" />
+                                    </div>
+                                </div>
+                              
+                            </h:panelGrid>
+                            <br></br><br></br>
+                         
+                            <a4j:commandButton value="Cập nhật" action="#{tableManagedBean.EditTable()}"  class="btn btn-default" 
+                                               render="tableTable" execute="popupUpdateTable"
+                                               oncomplete="if (#{facesContext.validationFailed==false}) 
+                                                      #{rich:component('popupUpdateTable')}.hide();">
+                            </a4j:commandButton>
+                            <h:commandButton style="margin-left: 25px" value="Hủy bỏ"  onclick="#{rich:component('popupUpdateTable')}.hide(); return false;" class="btn btn-default"/>
+                            <br></br>
+                      </center>
+                        
+                </rich:popupPanel>
+            </h:form>
+
+            <rich:popupPanel id="popupaddTable" modal="false" autosized="true" resizeable="false">
+                <f:facet name="header">
+                    <h:outputText value="Thêm bàn mới" />
+                </f:facet>
+                <f:facet name="controls">
+                    <h:outputLink value="#" onclick="#{rich:component('popupaddTable')}.hide(); return false;" style="color: inherit">
+                        X
+                    </h:outputLink>
+                </f:facet>
+                <center>
+                    <h:form>
+                        <h1 class="form-title-product"> Thêm thông tin bàn mới</h1>
+                        <h:panelGrid columns="3" class="panel-collapse" id="addTableGrid">
+                           <div class="form-group">
+                                    <label class="form-label-product">Tên bàn :</label>
+                                    <div class="col-md-10">
+                                        <h:inputText id="tableName" required="true" validatorMessage="Tên bàn không hợp lệ! "
+                                       requiredMessage="Tên bàn là bắt buộc phải nhập!" value="#{tableManagedBean.table.tableName}"
+                                       class= "form-control" />
+                                        <rich:message id="tableNameMsg" for="tableName" />
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="form-label-product">Trạng thái :</label>
+                                    <div class="col-md-10">
+                                        <h:selectOneMenu id="tableStatus" value="#{tableManagedBean.table.status}"
+                                                         class= "form-control">
+                                            <f:selectItem  itemValue="true" itemLabel="Còn trống" />
+                                            <f:selectItem itemValue="false" itemLabel="Đã có người ngồi!" />	
+                                        </h:selectOneMenu>
+                                         <rich:message id="tableStatusMsg" for="tableStatus" />
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label-product">Danh sách món đã gọi :</label>
+                                    <div class="col-md-10">
+                                        <h:inputText id="ProductListId" class= "form-control"  
+                                                     value="#{tableManagedBean.table.productIds}"/>
+                                          <rich:message id="ProductListIdMsg" for="ProductListId" />
+                                    </div>
+                                </div>
+                           
+                        </h:panelGrid>
+                        <br></br><br></br>
+                        
+                        <a4j:commandButton value="Thêm mới" action="#{tableManagedBean.AddTable()}"  class="btn btn-default" 
+                                            render="tableTable" execute="popupaddTable"
+                                            oncomplete="if (#{facesContext.validationFailed==false})  {#{rich:component('popupaddTable')}.hide();}" />
+                        
+                        <h:commandButton style="margin-left: 25px" value="Hủy bỏ"  onclick="#{rich:component('popupaddTable')}.hide(); return false;" class="btn btn-default"/>
+                       
+                    </h:form>
+                </center>
+            </rich:popupPanel>
+        </ui:define>
+    </ui:composition>
+
+
+</html>
