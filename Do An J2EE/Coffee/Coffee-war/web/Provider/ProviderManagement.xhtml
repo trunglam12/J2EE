@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+    <ui:composition template="/WEB-INF/templates/template.xhtml">
+        <ui:define name="content">
+            <h3 class="form-title-product">Quản lý nhà cung cấp</h3>
+            <a4j:commandButton class="btn btn-default" value="Thêm Nhà Cung Cấp" 
+                               oncomplete="#{rich:component('popupaddprovider')}.show()"> 
+            </a4j:commandButton>
+            <br></br><br></br>
+            <h:form id="form">
+                <rich:dataTable class="table table-striped" value="#{providerManagedBean.getAllProviders()}" 
+                                var="provider" id="tableProvider" rows="10">
+                    <rich:column>
+                        <f:facet name="header">Tên nhà cung cấp</f:facet>
+                        <h:outputText value="#{provider.providerName}"></h:outputText>
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Địa chỉ</f:facet>
+                        <h:outputText value="#{provider.address}"></h:outputText>
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Cập nhật</f:facet>
+                        <a4j:commandButton class="btn btn-default" value="Cập nhật" execute="@this" resetValues="true" 
+                                           action="#{providerManagedBean.setProvider(provider)}"
+                                           render="providerName address"         
+                                           oncomplete="#{rich:component('popupUpdateProvider')}.show()"> 
+                        </a4j:commandButton>
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Xóa</f:facet>
+                        <a4j:commandButton class="btn btn-default" value="Xóa" execute="@this" resetValues="true" 
+                                           action="#{providerManagedBean.setProvider(provider)}"    
+                                           oncomplete="#{rich:component('confirmPane')}.show()"> 
+                        </a4j:commandButton>
+                    </rich:column>
+
+                    <f:facet name="footer">
+                        <rich:dataScroller page="#{providerManagedBean.page}" fastStep="3"/>
+                    </f:facet>
+                </rich:dataTable>
+            </h:form>
+
+            <h:form>
+                <rich:popupPanel id="popupUpdateProvider"  domElementAttachment="parent" autosized="true" resizeable="false">
+                    <f:facet name="header">
+                        <h:outputText value="Cập nhật nhà cung cấp" />
+                    </f:facet>
+                    <f:facet name="controls">
+                        <h:outputLink value="#" onclick="#{rich:component('popupUpdateProvider')}.hide();
+                                return false;" style="color: inherit">
+                            X
+                        </h:outputLink>
+                    </f:facet>                   
+                    <center>
+                        <h1 class="form-title-product">Cập nhật nhà cung cấp</h1>
+                        <h:panelGrid columns="3" class="panel-collapse" id="updateProviderGrid">
+                            <div class="form-group">
+                                <label class="form-label-product">Tên nhà cung cấp:</label>
+                                <div class="col-md-10">
+                                    <h:inputText id="providerName" required="true" validatorMessage="Tên nhà cung cấp không hợp lệ."
+                                                 requiredMessage="Bắt buộc nhập tên nhà cung cấp." value="#{providerManagedBean.provider.providerName}" class= "form-control"/>
+                                    <rich:message id="providerNameMsg" for="providerName" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label-product">Địa chỉ:</label>
+                                <div class="col-md-10">
+                                    <h:inputText id="address" required="true" validatorMessage="Địa chỉ không hợp lệ."
+                                                 requiredMessage="Bắt buộc nhập địa chỉ." value="#{providerManagedBean.provider.address}" class= "form-control"/>
+                                    <rich:message id="addressMsg" for="address" />
+                                </div>
+                            </div>
+                        </h:panelGrid>
+                        <br></br><br></br>
+
+                        <a4j:commandButton value="Cập nhật" action="#{providerManagedBean.editProvider()}"  class="btn btn-default" render="tableProvider" execute="popupUpdateProvider"
+                                           oncomplete="if (#{facesContext.validationFailed==false}) 
+                                           #{rich:component('popupUpdateProvider')}.hide();">
+                        </a4j:commandButton>
+                        <h:commandButton style="margin-left: 25px" value="Hủy bỏ"  onclick="#{rich:component('popupUpdateProvider')}.hide();
+                                return false;" class="btn btn-default"/>
+                        <br></br>
+                    </center>
+                </rich:popupPanel>
+            </h:form>
+
+            <rich:popupPanel id="popupaddprovider" modal="false" autosized="true" resizeable="false">
+                <f:facet name="header">
+                    <h:outputText value="Thêm mới nhà cung cấp" />
+                </f:facet>
+                <f:facet name="controls">
+                    <h:outputLink value="#" onclick="#{rich:component('popupaddprovider')}.hide();
+                                return false;" style="color: inherit">
+                        X
+                    </h:outputLink>
+                </f:facet>
+                <center>
+                    <h:form>
+                        <h1 class="form-title-product">Thêm mới nhà cung cấp</h1>
+                        <h:panelGrid columns="3" class="panel-collapse" id="addProviderGrid">
+                            <div class="form-group">
+                                <label class="form-label-product">Tên nhà cung cấp:</label>
+                                <div class="col-md-10">
+                                    <h:inputText id="providerName" required="true" requiredMessage="Bắt buộc nhập tên nhà cung cấp!"
+                                                 value="#{providerManagedBean.provider.providerName}" class= "form-control"/>
+                                    <rich:message id="providerNameMsg" for="providerName" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label-product">Địa chỉ:</label>
+                                <div class="col-md-10">
+                                    <h:inputText id="address" required="true" requiredMessage="Bắt buộc nhập địa chỉ!"
+                                                 value="#{providerManagedBean.provider.address}" class= "form-control"/>
+                                    <rich:message id="addressMsg" for="address" />
+                                </div>
+                            </div>
+
+                        </h:panelGrid>
+                        <br></br><br></br>
+
+                        <a4j:commandButton value="Thêm mới" action="#{providerManagedBean.addProvider()}"  class="btn btn-default" 
+                                           render="tableProvider" execute="popupaddprovider"
+                                           oncomplete="if (#{facesContext.validationFailed==false})  {#{rich:component('popupaddprovider')}.hide();}" />
+
+                        <h:commandButton style="margin-left: 25px" value="Hủy bỏ"  onclick="#{rich:component('popupaddprovider')}.hide();
+                                return false;" class="btn btn-default"/>
+                    </h:form>
+                </center>
+            </rich:popupPanel>
+
+            <h:form>
+                <rich:popupPanel id="confirmPane" autosized="true">
+                    <f:facet name="header">
+                        <h:outputText value="Xóa nhà cung cấp" />
+                    </f:facet>
+                    <f:facet name="controls">
+                        <h:outputLink value="#" onclick="#{rich:component('confirmPane')}.hide();
+                                return false;" style="color: inherit">
+                            X
+                        </h:outputLink>
+                    </f:facet>
+
+                    Bạn có muốn xóa Nhà cung cấp này không?
+                    <a4j:commandButton value="Không" onclick="#{rich:component('confirmPane')}.hide();
+                                return false;" />
+                    <a4j:commandButton value="Có" action="#{providerManagedBean.removeProvider()}"
+                                       render="tableProvider" execute="confirmPane"
+                                       oncomplete="if (#{facesContext.validationFailed==false}) 
+                                       #{rich:component('confirmPane')}.hide();"/>
+                </rich:popupPanel>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
