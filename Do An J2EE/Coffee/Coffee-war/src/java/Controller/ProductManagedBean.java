@@ -14,6 +14,8 @@ import entities.Unit;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.inject.Named;
+import javax.enterprise.context.Dependent;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
