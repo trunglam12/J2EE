@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Lam
+ * @author CHRIST
  */
 @Stateless
 public class ReceiptFacade extends AbstractFacade<Receipt> {
@@ -24,8 +24,7 @@ public class ReceiptFacade extends AbstractFacade<Receipt> {
 
     @Override
     protected EntityManager getEntityManager() {
-        if(em==null)
-        {
+        if (em == null) {
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("Coffee-ejbPU");
             em = emf.createEntityManager();
         }
@@ -35,5 +34,5 @@ public class ReceiptFacade extends AbstractFacade<Receipt> {
     public ReceiptFacade() {
         super(Receipt.class);
     }
-    
+
 }

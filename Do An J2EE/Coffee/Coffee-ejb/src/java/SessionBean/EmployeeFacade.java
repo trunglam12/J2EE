@@ -14,11 +14,10 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Lam
+ * @author CHRIST
  */
 @Stateless
 public class EmployeeFacade extends AbstractFacade<Employee> {
-
     @PersistenceContext(unitName = "Coffee-ejbPU")
     private EntityManager em;
 

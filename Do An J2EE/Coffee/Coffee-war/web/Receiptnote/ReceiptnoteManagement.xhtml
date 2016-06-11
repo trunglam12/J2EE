@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+    
+    <ui:composition template="/WEB-INF/templates/template.xhtml">
+        <ui:define name="content">
+            <h3 class="form-title-product">Quản lý nhập hàng</h3>
+            <a4j:commandButton class="btn btn-default" value="Thêm Phiếu Nhập Hàng" 
+                               oncomplete="#{rich:component('popupaddReceiptnote')}.show()"> 
+            </a4j:commandButton>
+            <br></br><br></br>
+            <h:form id="form">
+                <rich:dataTable class="table table-striped" value="#{receiptnoteManagedBean.getAllReceiptnotes()}" 
+                                var="receiptnote" id="tableReceiptnote" rows="10">
+                    <rich:column>
+                        <f:facet name="header">Ngày nhập: </f:facet>
+                        <h:outputText value="#{receiptnote.date}">
+                            <f:convertDateTime type="date" pattern="dd/MM/yyyy" timeZone="#{java.util.TimeZone.getTimeZone()}"/>
+                        </h:outputText>
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Nhà cung cấp: </f:facet>
+                        <h:outputText value="#{receiptnote.providerId.providerName}"></h:outputText>
+                    </rich:column>
+                    
+                    <rich:column>
+                        <f:facet name="header">Tổng số lượng: </f:facet>
+                        <h:outputText value="#{receiptnote.totalCount}"></h:outputText>
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Cập nhật</f:facet>
+                        <a4j:commandButton class="btn btn-default" value="Cập nhật" execute="@this" resetValues="true" 
+                                           action="#{receiptnoteManagedBean.setReceiptnote(receiptnote)}"
+                                           render="date totalCount"         
+                                           oncomplete="#{rich:component('popupUpdateReceiptnote')}.show()"> 
+                        </a4j:commandButton>
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Xóa</f:facet>
+                        <a4j:commandButton class="btn btn-default" value="Xóa" execute="@this" resetValues="true" 
+                                           action="#{receiptnoteManagedBean.setReceiptnote(receiptnote)}"    
+                                           oncomplete="#{rich:component('confirmPane')}.show()"> 
+                        </a4j:commandButton>
+                    </rich:column>
+
+                    <f:facet name="footer">
+                        <rich:dataScroller page="#{receiptnoteManagedBean.page}" fastStep="3"/>
+                    </f:facet>
+                </rich:dataTable>
+            </h:form>
+
+            <h:form>
+                <rich:popupPanel id="popupUpdateReceiptnote"  domElementAttachment="parent" autosized="true" resizeable="false">
+                    <f:facet name="header">
+                        <h:outputText value="Cập nhật phiếu nhập hàng" />
+                    </f:facet>
+                    <f:facet name="controls">
+                        <h:outputLink value="#" onclick="#{rich:component('popupUpdateReceiptnote')}.hide();
+                                return false;" style="color: inherit">
+                            X
+                        </h:outputLink>
+                    </f:facet>                   
+                    <center>
+                        <h1 class="form-title-product">Cập nhật phiếu nhập hàng</h1>
+                        <h:panelGrid columns="3" class="panel-collapse" id="updateReceiptnoteGrid">
+                            <div class="form-group">
+                                <label class="form-label-product">Ngày nhập: </label>
+                                <div class="col-md-10">
+                                    <rich:calendar id="date" required="true" requiredMessage="Bắt buộc nhập ngày!"
+                                                   value="#{receiptnoteManagedBean.receiptnote.date}" datePattern="dd/MM/yyyy"/>
+                                    <rich:message id="dateMsg" for="date" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label-product"> Nhà cung cấp:</label>
+                                <div class="col-md-10">
+                                    <h:selectOneMenu id="provider" value="#{receiptnoteManagedBean.provider.providerId}" class="form-control">
+                                        <f:selectItems value="#{receiptnoteManagedBean.getAllProviders()}" var="provider" itemLabel="#{provider.providerName}" itemValue="#{provider.providerId}" />
+                                    </h:selectOneMenu>
+                                    <rich:message id="providerMsg" for="provider" />
+                                </div>
+                            </div>
+                        </h:panelGrid>
+                        <br></br><br></br>
+
+                        <a4j:commandButton value="Cập nhật" action="#{receiptnoteManagedBean.editReceiptnote()}"  class="btn btn-default" render="tableReceiptnote" execute="popupUpdateReceiptnote"
+                                           oncomplete="if (#{facesContext.validationFailed==false}) 
+                                           #{rich:component('popupUpdateReceiptnote')}.hide();">
+                        </a4j:commandButton>
+                        <h:commandButton style="margin-left: 25px" value="Hủy bỏ"  onclick="#{rich:component('popupUpdateReceiptnote')}.hide();
+                                return false;" class="btn btn-default"/>
+                        <br></br>
+                    </center>
+                </rich:popupPanel>
+            </h:form>
+
+            <rich:popupPanel id="popupaddReceiptnote" modal="false" autosized="true" resizeable="false">
+                <f:facet name="header">
+                    <h:outputText value="Thêm mới Phiếu nhập hàng" />
+                </f:facet>
+                <f:facet name="controls">
+                    <h:outputLink value="#" onclick="#{rich:component('popupaddReceiptnote')}.hide();
+                                return false;" style="color: inherit">
+                        X
+                    </h:outputLink>
+                </f:facet>
+                <center>
+                    <h:form>
+                        <h1 class="form-title-product">Thêm mới Phiếu nhập hàng</h1>
+                        <h:panelGrid columns="3" class="panel-collapse" id="addReceiptnoteGrid">
+                            <div class="form-group">
+                                <label class="form-label-product">Ngày nhập:</label>
+                                <div class="col-md-10">
+                                    <rich:calendar id="date" required="true" requiredMessage="Bắt buộc nhập ngày!"
+                                                   value="#{receiptnoteManagedBean.receiptnote.date}" datePattern="dd/MM/yyyy"/>
+                                    <rich:message id="dateMsg" for="date" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label-product"> Nhà cung cấp:</label>
+                                <div class="col-md-10">
+                                    <h:selectOneMenu id="provider" value="#{receiptnoteManagedBean.provider.providerId}" class="form-control">
+                                        <f:selectItems value="#{receiptnoteManagedBean.getAllProviders()}" var="provider" itemLabel="#{provider.providerName}" itemValue="#{provider.providerId}" />
+                                    </h:selectOneMenu>
+                                    <rich:message id="providerMsg" for="provider" />
+                                </div>
+                            </div>
+                        </h:panelGrid>
+                        <br></br><br></br>
+
+                        <a4j:commandButton value="Thêm mới" action="#{receiptnoteManagedBean.addReceiptnote()}"  class="btn btn-default" 
+                                           render="tableReceiptnote" execute="popupaddReceiptnote"
+                                           oncomplete="if (#{facesContext.validationFailed==false})  {#{rich:component('popupaddReceiptnote')}.hide();}" />
+
+                        <h:commandButton style="margin-left: 25px" value="Hủy bỏ"  onclick="#{rich:component('popupaddReceiptnote')}.hide();
+                                return false;" class="btn btn-default"/>
+                    </h:form>
+                </center>
+            </rich:popupPanel>
+
+            <h:form>
+                <rich:popupPanel id="confirmPane" autosized="true">
+                    <f:facet name="header">
+                        <h:outputText value="Xóa phiếu nhập hàng" />
+                    </f:facet>
+                    <f:facet name="controls">
+                        <h:outputLink value="#" onclick="#{rich:component('confirmPane')}.hide();
+                                return false;" style="color: inherit">
+                            X
+                        </h:outputLink>
+                    </f:facet>
+
+                    Bạn có muốn xóa phiếu nhập hàng này không?
+                    <a4j:commandButton value="Không" onclick="#{rich:component('confirmPane')}.hide();
+                                return false;" />
+                    <a4j:commandButton value="Có" action="#{receiptnoteManagedBean.removeReceiptnote()}"
+                                       render="tableReceiptnote" execute="confirmPane"
+                                       oncomplete="if (#{facesContext.validationFailed==false}) 
+                                       #{rich:component('confirmPane')}.hide();"/>
+                </rich:popupPanel>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

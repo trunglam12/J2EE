@@ -109,7 +109,7 @@ CREATE TABLE `groupproduct` (
   `GroupId` int(11) NOT NULL AUTO_INCREMENT,
   `GroupName` varchar(100) NOT NULL,
   PRIMARY KEY (`GroupId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +118,7 @@ CREATE TABLE `groupproduct` (
 
 LOCK TABLES `groupproduct` WRITE;
 /*!40000 ALTER TABLE `groupproduct` DISABLE KEYS */;
-INSERT INTO `groupproduct` VALUES (1,'Thức uống');
+INSERT INTO `groupproduct` VALUES (1,'Thức uống'),(2,'thuc an');
 /*!40000 ALTER TABLE `groupproduct` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -138,6 +138,7 @@ CREATE TABLE `product` (
   `Count` int(11) NOT NULL,
   `Status` bit(1) NOT NULL,
   `Image` varchar(100) DEFAULT NULL,
+  `OgrinalPrice` decimal(10,0) DEFAULT NULL,
   PRIMARY KEY (`ProductId`),
   KEY `FK_Product_Group` (`GroupId`),
   KEY `FK_Product_Unit` (`UnitId`),
@@ -152,7 +153,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,1,1,'Aquafina',10000,100,'','/Product/aquafina.png');
+INSERT INTO `product` VALUES (1,1,1,'Aquafina',10000,100,'','/Product/aquafina.png',NULL);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -168,7 +169,7 @@ CREATE TABLE `provider` (
   `ProviderName` varchar(100) NOT NULL,
   `Address` varchar(200) NOT NULL,
   PRIMARY KEY (`ProviderId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -177,7 +178,7 @@ CREATE TABLE `provider` (
 
 LOCK TABLES `provider` WRITE;
 /*!40000 ALTER TABLE `provider` DISABLE KEYS */;
-INSERT INTO `provider` VALUES (2,'Cà phê Trung Nguyên','Q9, TPHCM');
+INSERT INTO `provider` VALUES (2,'Cà phê Trung Nguyên','Q9, TPHCM'),(3,'Vinamilk','Q1, HCM'),(4,'Cocacola','Q9, HCM');
 /*!40000 ALTER TABLE `provider` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -228,7 +229,7 @@ CREATE TABLE `receiptnote` (
   PRIMARY KEY (`ReceiptNoteId`),
   KEY `FK_ReceiptNote_Provider` (`ProviderId`),
   CONSTRAINT `FK_ReceiptNote_Provider` FOREIGN KEY (`ProviderId`) REFERENCES `provider` (`ProviderId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -237,6 +238,7 @@ CREATE TABLE `receiptnote` (
 
 LOCK TABLES `receiptnote` WRITE;
 /*!40000 ALTER TABLE `receiptnote` DISABLE KEYS */;
+INSERT INTO `receiptnote` VALUES (2,2,'2016-06-23',0),(7,4,'2016-06-30',0);
 /*!40000 ALTER TABLE `receiptnote` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -262,7 +264,7 @@ CREATE TABLE `tablecoffee` (
 
 LOCK TABLES `tablecoffee` WRITE;
 /*!40000 ALTER TABLE `tablecoffee` DISABLE KEYS */;
-INSERT INTO `tablecoffee` VALUES (1,'Bàn 1','\0','1'),(2,'Bàn 2','','');
+INSERT INTO `tablecoffee` VALUES (1,'Bàn 1','\0','1 1'),(2,'Bàn 2','','');
 /*!40000 ALTER TABLE `tablecoffee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -277,7 +279,7 @@ CREATE TABLE `unit` (
   `UnitId` int(11) NOT NULL AUTO_INCREMENT,
   `UnitName` varchar(50) NOT NULL,
   PRIMARY KEY (`UnitId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -286,7 +288,7 @@ CREATE TABLE `unit` (
 
 LOCK TABLES `unit` WRITE;
 /*!40000 ALTER TABLE `unit` DISABLE KEYS */;
-INSERT INTO `unit` VALUES (1,'chai');
+INSERT INTO `unit` VALUES (1,'chai'),(2,'thùng');
 /*!40000 ALTER TABLE `unit` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -330,4 +332,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-11 11:17:46
+-- Dump completed on 2016-06-11 16:05:11
