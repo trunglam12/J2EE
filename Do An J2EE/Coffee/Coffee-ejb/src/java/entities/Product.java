@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
     @NamedQuery(name = "Product.findByCount", query = "SELECT p FROM Product p WHERE p.count = :count"),
     @NamedQuery(name = "Product.findByStatus", query = "SELECT p FROM Product p WHERE p.status = :status"),
-    @NamedQuery(name = "Product.findByImage", query = "SELECT p FROM Product p WHERE p.image = :image")})
+    @NamedQuery(name = "Product.findByImage", query = "SELECT p FROM Product p WHERE p.image = :image"),
+    @NamedQuery(name = "Product.findByOgrinalPrice", query = "SELECT p FROM Product p WHERE p.ogrinalPrice = :ogrinalPrice")})
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -63,6 +64,8 @@ public class Product implements Serializable {
     @Size(max = 100)
     @Column(name = "Image")
     private String image;
+    @Column(name = "OgrinalPrice")
+    private Long ogrinalPrice;
     @JoinColumn(name = "GroupId", referencedColumnName = "GroupId")
     @ManyToOne(optional = false)
     private Groupproduct groupId;
@@ -131,6 +134,14 @@ public class Product implements Serializable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Long getOgrinalPrice() {
+        return ogrinalPrice;
+    }
+
+    public void setOgrinalPrice(Long ogrinalPrice) {
+        this.ogrinalPrice = ogrinalPrice;
     }
 
     public Groupproduct getGroupId() {

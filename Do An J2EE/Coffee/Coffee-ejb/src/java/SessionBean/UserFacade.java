@@ -5,7 +5,7 @@
  */
 package SessionBean;
 
-import entities.Groupproduct;
+import entities.User;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -17,7 +17,7 @@ import javax.persistence.PersistenceContext;
  * @author CHRIST
  */
 @Stateless
-public class GroupproductFacade extends AbstractFacade<Groupproduct> {
+public class UserFacade extends AbstractFacade<User> {
     @PersistenceContext(unitName = "Coffee-ejbPU")
     private EntityManager em;
 
@@ -31,8 +31,8 @@ public class GroupproductFacade extends AbstractFacade<Groupproduct> {
         return em;
     }
 
-    public GroupproductFacade() {
-        super(Groupproduct.class);
+    public UserFacade() {
+        super(User.class);
     }
     
 }

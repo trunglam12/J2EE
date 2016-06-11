@@ -14,17 +14,15 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Lam
+ * @author CHRIST
  */
 @Stateless
 public class DetailreceiptFacade extends AbstractFacade<Detailreceipt> {
-
     @PersistenceContext(unitName = "Coffee-ejbPU")
     private EntityManager em;
 
     @Override
     protected EntityManager getEntityManager() {
-        
         if(em==null)
         {
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("Coffee-ejbPU");
