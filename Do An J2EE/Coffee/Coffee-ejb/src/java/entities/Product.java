@@ -6,9 +6,7 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,16 +16,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Lam
+ * @author CHRIST
  */
 @Entity
 @Table(name = "product")
@@ -38,9 +34,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Product.findByProductName", query = "SELECT p FROM Product p WHERE p.productName = :productName"),
     @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
     @NamedQuery(name = "Product.findByCount", query = "SELECT p FROM Product p WHERE p.count = :count"),
-    @NamedQuery(name = "Product.findByStatus", query = "SELECT p FROM Product p WHERE p.status = :status")})
+    @NamedQuery(name = "Product.findByStatus", query = "SELECT p FROM Product p WHERE p.status = :status"),
+    @NamedQuery(name = "Product.findByImage", query = "SELECT p FROM Product p WHERE p.image = :image")})
 public class Product implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,16 +60,15 @@ public class Product implements Serializable {
     @NotNull
     @Column(name = "Status")
     private boolean status;
+    @Size(max = 100)
+    @Column(name = "Image")
+    private String image;
     @JoinColumn(name = "GroupId", referencedColumnName = "GroupId")
     @ManyToOne(optional = false)
     private Groupproduct groupId;
     @JoinColumn(name = "UnitId", referencedColumnName = "UnitId")
     @ManyToOne(optional = false)
     private Unit unitId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-    private List<Detailreceiptnote> detailreceiptnoteList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-    private List<Detailreceipt> detailreceiptList;
 
     public Product() {
     }
@@ -130,6 +125,14 @@ public class Product implements Serializable {
         this.status = status;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public Groupproduct getGroupId() {
         return groupId;
     }
@@ -144,24 +147,6 @@ public class Product implements Serializable {
 
     public void setUnitId(Unit unitId) {
         this.unitId = unitId;
-    }
-
-    @XmlTransient
-    public List<Detailreceiptnote> getDetailreceiptnoteList() {
-        return detailreceiptnoteList;
-    }
-
-    public void setDetailreceiptnoteList(List<Detailreceiptnote> detailreceiptnoteList) {
-        this.detailreceiptnoteList = detailreceiptnoteList;
-    }
-
-    @XmlTransient
-    public List<Detailreceipt> getDetailreceiptList() {
-        return detailreceiptList;
-    }
-
-    public void setDetailreceiptList(List<Detailreceipt> detailreceiptList) {
-        this.detailreceiptList = detailreceiptList;
     }
 
     @Override

@@ -96,6 +96,5 @@ public class GroupProductManagedBean {
           e.printStackTrace();
       }
     }
-    
-    
 }
+

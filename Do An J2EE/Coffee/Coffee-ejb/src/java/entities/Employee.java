@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Lam
+ * @author CHRIST
  */
 @Entity
 @Table(name = "employee")
@@ -38,7 +38,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Employee.findByPhone", query = "SELECT e FROM Employee e WHERE e.phone = :phone"),
     @NamedQuery(name = "Employee.findByRole", query = "SELECT e FROM Employee e WHERE e.role = :role")})
 public class Employee implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,7 +64,7 @@ public class Employee implements Serializable {
     @Column(name = "Role")
     private String role;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "employeeId")
-    private List<Receipt> receiptList;
+    private List<User> userList;
 
     public Employee() {
     }
@@ -122,12 +121,12 @@ public class Employee implements Serializable {
     }
 
     @XmlTransient
-    public List<Receipt> getReceiptList() {
-        return receiptList;
+    public List<User> getUserList() {
+        return userList;
     }
 
-    public void setReceiptList(List<Receipt> receiptList) {
-        this.receiptList = receiptList;
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
     }
 
     @Override
