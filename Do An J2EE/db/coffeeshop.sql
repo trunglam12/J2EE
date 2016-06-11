@@ -109,7 +109,7 @@ CREATE TABLE `groupproduct` (
   `GroupId` int(11) NOT NULL AUTO_INCREMENT,
   `GroupName` varchar(100) NOT NULL,
   PRIMARY KEY (`GroupId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,6 +118,7 @@ CREATE TABLE `groupproduct` (
 
 LOCK TABLES `groupproduct` WRITE;
 /*!40000 ALTER TABLE `groupproduct` DISABLE KEYS */;
+INSERT INTO `groupproduct` VALUES (1,'Thức uống');
 /*!40000 ALTER TABLE `groupproduct` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -136,12 +137,13 @@ CREATE TABLE `product` (
   `Price` decimal(10,0) NOT NULL,
   `Count` int(11) NOT NULL,
   `Status` bit(1) NOT NULL,
+  `Image` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`ProductId`),
   KEY `FK_Product_Group` (`GroupId`),
   KEY `FK_Product_Unit` (`UnitId`),
   CONSTRAINT `FK_Product_Group` FOREIGN KEY (`GroupId`) REFERENCES `groupproduct` (`GroupId`),
   CONSTRAINT `FK_Product_Unit` FOREIGN KEY (`UnitId`) REFERENCES `unit` (`UnitId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -150,6 +152,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` VALUES (1,1,1,'Aquafina',10000,100,'','/Product/aquafina.png');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -165,7 +168,7 @@ CREATE TABLE `provider` (
   `ProviderName` varchar(100) NOT NULL,
   `Address` varchar(200) NOT NULL,
   PRIMARY KEY (`ProviderId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -174,6 +177,7 @@ CREATE TABLE `provider` (
 
 LOCK TABLES `provider` WRITE;
 /*!40000 ALTER TABLE `provider` DISABLE KEYS */;
+INSERT INTO `provider` VALUES (2,'Cà phê Trung Nguyên','Q9, TPHCM');
 /*!40000 ALTER TABLE `provider` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -249,7 +253,7 @@ CREATE TABLE `tablecoffee` (
   `Status` bit(1) NOT NULL,
   `ProductIds` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`TableId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -258,6 +262,7 @@ CREATE TABLE `tablecoffee` (
 
 LOCK TABLES `tablecoffee` WRITE;
 /*!40000 ALTER TABLE `tablecoffee` DISABLE KEYS */;
+INSERT INTO `tablecoffee` VALUES (1,'Bàn 1','\0','1'),(2,'Bàn 2','','');
 /*!40000 ALTER TABLE `tablecoffee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -272,7 +277,7 @@ CREATE TABLE `unit` (
   `UnitId` int(11) NOT NULL AUTO_INCREMENT,
   `UnitName` varchar(50) NOT NULL,
   PRIMARY KEY (`UnitId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -281,7 +286,35 @@ CREATE TABLE `unit` (
 
 LOCK TABLES `unit` WRITE;
 /*!40000 ALTER TABLE `unit` DISABLE KEYS */;
+INSERT INTO `unit` VALUES (1,'chai');
 /*!40000 ALTER TABLE `unit` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `UserId` int(11) NOT NULL AUTO_INCREMENT,
+  `UserAccount` varchar(30) NOT NULL,
+  `Password` varchar(64) NOT NULL,
+  `EmployeeId` int(11) NOT NULL,
+  PRIMARY KEY (`UserId`),
+  KEY `FK_User_Employee` (`EmployeeId`),
+  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`EmployeeId`) REFERENCES `employee` (`EmployeeId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -297,4 +330,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-04  0:12:07
+-- Dump completed on 2016-06-11 11:17:46
