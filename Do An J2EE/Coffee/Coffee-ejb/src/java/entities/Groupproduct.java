@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Lam
+ * @author CHRIST
  */
 @Entity
 @Table(name = "groupproduct")
@@ -35,7 +35,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Groupproduct.findByGroupId", query = "SELECT g FROM Groupproduct g WHERE g.groupId = :groupId"),
     @NamedQuery(name = "Groupproduct.findByGroupName", query = "SELECT g FROM Groupproduct g WHERE g.groupName = :groupName")})
 public class Groupproduct implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

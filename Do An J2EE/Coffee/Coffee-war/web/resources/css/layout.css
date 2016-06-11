@@ -798,3 +798,20 @@ body {min-height:100%;margin:0}
     font-size: 15px;
     color:#942020;
 }
+
+.table-title{
+    font-size: 18px;
+    color:#3498DB;
+    margin-right: 5px;
+    font-weight: bold;
+}
+.table-row {
+    font-size: 14px;
+    color: #5F2221;
+    margin: auto;
+    margin-bottom: 33px;
+}
+.rf-dt-shdr-c {
+   
+    vertical-align: top !important;
+}

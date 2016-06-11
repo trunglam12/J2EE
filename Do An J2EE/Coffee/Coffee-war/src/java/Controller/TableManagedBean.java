@@ -5,14 +5,18 @@
  */
 package Controller;
 
+import SessionBean.ProductFacade;
 import SessionBean.TablecoffeeFacade;
+import entities.Product;
 import entities.Tablecoffee;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+
 
 /**
  *
@@ -23,11 +27,33 @@ import javax.faces.bean.SessionScoped;
 public class TableManagedBean {
 
     @EJB
+    private ProductFacade productFacade;
+
+    @EJB
     private TablecoffeeFacade tablecoffeeFacade;
 
    public List<Tablecoffee> ListAllTable;
    public Tablecoffee _table = new Tablecoffee();
    public int page=1;
+   private String productIds="";
+   private List<Product> listProductOrder = new ArrayList<Product>();
+
+    public List<Product> getListProductOrder() {
+        return listProductOrder;
+    }
+
+    public void setListProductOrder(List<Product> listProductOrder) {
+        this.listProductOrder = listProductOrder;
+    }
+  
+
+    public String getProductIds() {
+        return productIds;
+    }
+
+    public void setProductIds(String productIds) {
+        this.productIds = productIds;
+    }
 
     public List<Tablecoffee> getListAllTable() {
         return ListAllTable;
@@ -74,6 +100,43 @@ public class TableManagedBean {
         tablecoffeeFacade.remove(_table);
     }
     
+    public void Order(Product product)
+    { 
+        if(productIds.equals("")) productIds =_table.getProductIds().toString();
+        
+        if(productIds.equals(""))
+        {
+            productIds = product.getProductId().toString();
+        }
+        else
+        productIds = productIds+ " " + product.getProductId();
+        
+        _table.setProductIds(productIds);
+    }
+    
+    public void RemoveOrder(Product product)
+    { 
+        for(int i=0;i<listProductOrder.size();i++)
+        {
+            if(listProductOrder.get(i).getProductId()==product.getProductId())
+            {
+                listProductOrder.remove(listProductOrder.get(i));
+                break;
+            }
+        }
+        
+        productIds ="";
+        
+         for(int i=0;i<listProductOrder.size();i++)
+        {
+            productIds = productIds+ " " + listProductOrder.get(i).getProductId();
+        }
+        
+         productIds = productIds.trim();
+        
+         _table.setProductIds(productIds);
+    }
+    
     public void EditTable()
     {
           try
@@ -103,5 +166,30 @@ public class TableManagedBean {
         if(status==true) return "Bàn Trống";
         else 
             return "Bàn đã có người ngồi!";
+    }
+    
+    public void GetListProductOrder(Tablecoffee table)
+    {
+        listProductOrder.clear();
+        _table = table;
+        
+        String productids =  _table.getProductIds();
+        String id;
+        
+        while( !productids.equals(""))
+        {
+           if(productids.indexOf(" ")!= -1)
+           {
+                 id = productids.substring(0,productids.indexOf(" "));
+                  productids = productids.substring(productids.indexOf(" "), productids.length()).trim();
+           }
+           else 
+           {
+                 id = productids;
+                 productids="";
+           }
+
+           listProductOrder.add(productFacade.find(Integer.parseInt(id)));
+        }
     }
 }
