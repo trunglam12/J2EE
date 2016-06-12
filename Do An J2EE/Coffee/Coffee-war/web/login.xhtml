@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="css/bootstrap.min.css"/>
+        <h:outputStylesheet name="css/font-awesome.css"/>
+        <h:outputStylesheet name="css/animate.css"/>
+        <h:outputStylesheet name="css/default.css"/>
+
+        <h:outputScript name="js/jquery-2.2.4.min.js"/>
+        <h:outputScript name="js/bootstrap.js"/>
+        <title>Coffee shop</title>
+    </h:head>
+
+    <h:body class="login">
+        <div>
+            <a class="hiddenanchor" id="signup"></a>
+            <a class="hiddenanchor" id="signin"></a>
+
+            <div class="login_wrapper">
+                <div class="animate form login_form">
+                    <section class="login_content">
+                        <h:form>
+                            <h1>Đăng nhập</h1>
+                            <h:messages class="alert alert-danger"></h:messages>
+                            <div>
+                                <h:inputText value="#{loginBean.username}" class="form-control" required="true"
+                                    requiredMessage="Bạn phải nhập tài khoản" a:placeholder="Tài khoản"/>
+                                <h:message for="username" />
+                            </div>
+                            <div>
+                                <h:inputSecret value="#{loginBean.password}" class="form-control" required="true" 
+                                    requiredMessage="Bạn phải nhập mật khẩu" a:placeholder="Mật khẩu"/>
+                                <h:message for="password" />
+                            </div>
+                            <div class="span-center">
+                                <h:commandButton value="Đăng nhập" action="#{loginBean.Login}" styleClass="btn btn-default"></h:commandButton>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="separator">
+                                <p class="change_link">Là thành viên mới?
+                                    <a href="#signup" class="to_register"> Tạo tài khoản </a>
+                                </p>
+
+                                <div class="clearfix"></div>
+                                <br />
+
+                                <div>
+                                    <h1><i class="fa fa-paw"></i> Coffee Shop!</h1>
+                                </div>
+                            </div>
+                        </h:form>
+                    </section>
+                </div>
+
+                <div id="register" class="animate form registration_form">
+                    <section class="login_content">
+                        <h:form>
+                            <h1>Tạo tài khoản</h1>
+                            <div>
+                                <h:inputText value="#{loginBean.username}" class="form-control" required="true" 
+                                    requiredMessage="Bạn phải nhập tài khoản" a:placeholder="Tài khoản"/>
+                            </div>
+                            <div>
+                                <h:inputSecret value="#{loginBean.password}" class="form-control" required="true" 
+                                    requiredMessage="Bạn phải nhập mật khẩu" a:placeholder="Mật khẩu"/>
+                            </div>
+                            <div>
+                                <h:inputSecret value="#{loginBean.confirmPassword}" class="form-control" required="true" 
+                                    requiredMessage="Bạn phải nhập mật khẩu xác nhận" a:placeholder="Xác nhận mật khẩu"/>
+                            </div>
+                            <div class="span-center">
+                                <h:commandButton value="Đăng ký" action="#{loginBean.Register}" styleClass="btn btn-default"></h:commandButton>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="separator">
+                                <p class="change_link">Đã là thành viên ?
+                                    <a href="#signin" class="to_register"> Đăng nhập </a>
+                                </p>
+
+                                <div class="clearfix"></div>
+                                <br />
+
+                                <div>
+                                    <h1><i class="fa fa-paw"></i> Coffee Shop!</h1>
+                                </div>
+                            </div>
+                        </h:form>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>
