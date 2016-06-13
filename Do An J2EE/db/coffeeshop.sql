@@ -86,7 +86,7 @@ CREATE TABLE `employee` (
   `Phone` varchar(15) NOT NULL,
   `Role` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`EmployeeId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,6 +95,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
+INSERT INTO `employee` VALUES (1,'Nguyễn Hải Đăng','Q9, HCM','123456789',NULL);
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -196,12 +197,9 @@ CREATE TABLE `receipt` (
   `CustomerName` varchar(100) NOT NULL,
   `TotalPrice` decimal(10,0) NOT NULL,
   `Status` bit(1) NOT NULL,
-  `TableId` int(11) DEFAULT NULL,
   PRIMARY KEY (`ReceiptId`),
   KEY `FK_Receipt_Employee` (`EmployeeId`),
-  KEY `FK_Receipt_Table` (`TableId`),
-  CONSTRAINT `FK_Receipt_Employee` FOREIGN KEY (`EmployeeId`) REFERENCES `employee` (`EmployeeId`),
-  CONSTRAINT `FK_Receipt_Table` FOREIGN KEY (`TableId`) REFERENCES `tablecoffee` (`TableId`)
+  CONSTRAINT `FK_Receipt_Employee` FOREIGN KEY (`EmployeeId`) REFERENCES `employee` (`EmployeeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -238,7 +236,7 @@ CREATE TABLE `receiptnote` (
 
 LOCK TABLES `receiptnote` WRITE;
 /*!40000 ALTER TABLE `receiptnote` DISABLE KEYS */;
-INSERT INTO `receiptnote` VALUES (2,2,'2016-06-23',0),(7,4,'2016-06-30',0);
+INSERT INTO `receiptnote` VALUES (2,4,'2016-06-23',0),(7,2,'2016-06-30',0);
 /*!40000 ALTER TABLE `receiptnote` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -253,8 +251,10 @@ CREATE TABLE `tablecoffee` (
   `TableId` int(11) NOT NULL AUTO_INCREMENT,
   `TableName` varchar(100) NOT NULL,
   `Status` bit(1) NOT NULL,
-  `ProductIds` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`TableId`)
+  `ReceiptId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`TableId`),
+  KEY `FK_Table_Receipt_idx` (`ReceiptId`),
+  CONSTRAINT `FK_Table_Receipt` FOREIGN KEY (`ReceiptId`) REFERENCES `receipt` (`ReceiptId`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -264,7 +264,7 @@ CREATE TABLE `tablecoffee` (
 
 LOCK TABLES `tablecoffee` WRITE;
 /*!40000 ALTER TABLE `tablecoffee` DISABLE KEYS */;
-INSERT INTO `tablecoffee` VALUES (1,'Bàn 1','\0','1 1'),(2,'Bàn 2','','');
+INSERT INTO `tablecoffee` VALUES (1,'Bàn 1','\0',NULL),(2,'Bàn 2','',NULL);
 /*!40000 ALTER TABLE `tablecoffee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -307,7 +307,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`UserId`),
   KEY `FK_User_Employee` (`EmployeeId`),
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`EmployeeId`) REFERENCES `employee` (`EmployeeId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -316,6 +316,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'admin','81dc9bdb52d04dc20036dbd8313ed055',1);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -332,4 +333,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-11 16:05:11
+-- Dump completed on 2016-06-13 10:05:39

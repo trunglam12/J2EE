@@ -102,7 +102,7 @@ public class TableManagedBean {
     
     public void Order(Product product)
     { 
-        if(productIds.equals("")) productIds =_table.getProductIds().toString();
+        /*if(productIds.equals("")) productIds =_table.getProductIds().toString();
         
         if(productIds.equals(""))
         {
@@ -111,7 +111,7 @@ public class TableManagedBean {
         else
         productIds = productIds+ " " + product.getProductId();
         
-        _table.setProductIds(productIds);
+        _table.setProductIds(productIds);*/
     }
     
     public void RemoveOrder(Product product)
@@ -134,7 +134,7 @@ public class TableManagedBean {
         
          productIds = productIds.trim();
         
-         _table.setProductIds(productIds);
+         //_table.setProductIds(productIds);
     }
     
     public void EditTable()
@@ -173,7 +173,7 @@ public class TableManagedBean {
         listProductOrder.clear();
         _table = table;
         
-        String productids =  _table.getProductIds();
+        /*String productids =  _table.getProductIds();
         String id;
         
         while( !productids.equals(""))
@@ -190,6 +190,6 @@ public class TableManagedBean {
            }
 
            listProductOrder.add(productFacade.find(Integer.parseInt(id)));
-        }
+        }*/
     }
 }

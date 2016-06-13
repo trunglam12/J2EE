@@ -64,6 +64,8 @@ public class Employee implements Serializable {
     @Column(name = "Role")
     private String role;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "employeeId")
+    private List<Receipt> receiptList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employeeId")
     private List<User> userList;
 
     public Employee() {
@@ -118,6 +120,15 @@ public class Employee implements Serializable {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    @XmlTransient
+    public List<Receipt> getReceiptList() {
+        return receiptList;
+    }
+
+    public void setReceiptList(List<Receipt> receiptList) {
+        this.receiptList = receiptList;
     }
 
     @XmlTransient

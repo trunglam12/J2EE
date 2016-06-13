@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Lam
+ * @author CHRIST
  */
 @Entity
 @Table(name = "receipt")
@@ -43,7 +43,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Receipt.findByTotalPrice", query = "SELECT r FROM Receipt r WHERE r.totalPrice = :totalPrice"),
     @NamedQuery(name = "Receipt.findByStatus", query = "SELECT r FROM Receipt r WHERE r.status = :status")})
 public class Receipt implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,11 +70,10 @@ public class Receipt implements Serializable {
     @JoinColumn(name = "EmployeeId", referencedColumnName = "EmployeeId")
     @ManyToOne(optional = false)
     private Employee employeeId;
-    @JoinColumn(name = "TableId", referencedColumnName = "TableId")
-    @ManyToOne
-    private Tablecoffee tableId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "receipt")
     private List<Detailreceipt> detailreceiptList;
+    @OneToMany(mappedBy = "receiptId")
+    private List<Tablecoffee> tablecoffeeList;
 
     public Receipt() {
     }
@@ -140,14 +138,6 @@ public class Receipt implements Serializable {
         this.employeeId = employeeId;
     }
 
-    public Tablecoffee getTableId() {
-        return tableId;
-    }
-
-    public void setTableId(Tablecoffee tableId) {
-        this.tableId = tableId;
-    }
-
     @XmlTransient
     public List<Detailreceipt> getDetailreceiptList() {
         return detailreceiptList;
@@ -155,6 +145,15 @@ public class Receipt implements Serializable {
 
     public void setDetailreceiptList(List<Detailreceipt> detailreceiptList) {
         this.detailreceiptList = detailreceiptList;
+    }
+
+    @XmlTransient
+    public List<Tablecoffee> getTablecoffeeList() {
+        return tablecoffeeList;
+    }
+
+    public void setTablecoffeeList(List<Tablecoffee> tablecoffeeList) {
+        this.tablecoffeeList = tablecoffeeList;
     }
 
     @Override

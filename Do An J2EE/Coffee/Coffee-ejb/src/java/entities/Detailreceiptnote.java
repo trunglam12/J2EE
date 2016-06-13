@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Lam
+ * @author CHRIST
  */
 @Entity
 @Table(name = "detailreceiptnote")
@@ -32,7 +32,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Detailreceiptnote.findByPrice", query = "SELECT d FROM Detailreceiptnote d WHERE d.price = :price"),
     @NamedQuery(name = "Detailreceiptnote.findByCount", query = "SELECT d FROM Detailreceiptnote d WHERE d.count = :count")})
 public class Detailreceiptnote implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected DetailreceiptnotePK detailreceiptnotePK;

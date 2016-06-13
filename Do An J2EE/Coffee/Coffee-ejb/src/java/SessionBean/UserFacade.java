@@ -25,8 +25,7 @@ public class UserFacade extends AbstractFacade<User> {
 
     @Override
     protected EntityManager getEntityManager() {
-        if(em==null)
-        {
+        if(em==null){
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("Coffee-ejbPU");
             em = emf.createEntityManager();
         }
@@ -37,7 +36,7 @@ public class UserFacade extends AbstractFacade<User> {
         super(User.class);
     }
     
-        public boolean IsUserAccountExist(String userAccount){
+    public boolean IsUserAccountExist(String userAccount){
         Query query = getEntityManager().createNamedQuery("User.findByUserAccount");
         query.setParameter("userAccount", userAccount);
         List<User> result = query.getResultList();

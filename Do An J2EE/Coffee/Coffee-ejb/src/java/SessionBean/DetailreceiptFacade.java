@@ -23,8 +23,7 @@ public class DetailreceiptFacade extends AbstractFacade<Detailreceipt> {
 
     @Override
     protected EntityManager getEntityManager() {
-        if(em==null)
-        {
+        if(em==null){
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("Coffee-ejbPU");
             em = emf.createEntityManager();
         }
