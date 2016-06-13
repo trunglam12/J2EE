@@ -69,6 +69,12 @@ CREATE TABLE `detailreceiptnote` (
 
 LOCK TABLES `detailreceiptnote` WRITE;
 /*!40000 ALTER TABLE `detailreceiptnote` DISABLE KEYS */;
+INSERT INTO `coffeeshop`.`detailreceipt` (`ReceiptId`, `ProductId`, `Count`) VALUES ('1', '1', '3');
+INSERT INTO `coffeeshop`.`detailreceipt` (`ReceiptId`, `ProductId`, `Count`) VALUES ('1', '3', '1');
+INSERT INTO `coffeeshop`.`detailreceipt` (`ReceiptId`, `ProductId`, `Count`) VALUES ('2', '1', '4');
+INSERT INTO `coffeeshop`.`detailreceipt` (`ReceiptId`, `ProductId`, `Count`) VALUES ('2', '2', '1');
+INSERT INTO `coffeeshop`.`detailreceipt` (`ReceiptId`, `ProductId`, `Count`) VALUES ('3', '2', '3');
+INSERT INTO `coffeeshop`.`detailreceipt` (`ReceiptId`, `ProductId`, `Count`) VALUES ('3', '3', '2');
 /*!40000 ALTER TABLE `detailreceiptnote` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -155,6 +161,8 @@ CREATE TABLE `product` (
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
 INSERT INTO `product` VALUES (1,1,1,'Aquafina',10000,100,'','/Product/aquafina.png',NULL);
+INSERT INTO `product` VALUES (2,1,1,'Sting',15000,100,'','/Product/aquafina.png',NULL);
+INSERT INTO `product` VALUES (3,3,1,'Khoai tây chiên',20000,100,'','/Product/aquafina.png',NULL);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -209,6 +217,9 @@ CREATE TABLE `receipt` (
 
 LOCK TABLES `receipt` WRITE;
 /*!40000 ALTER TABLE `receipt` DISABLE KEYS */;
+INSERT INTO `coffeeshop`.`receipt` (`EmployeeId`, `Date`, `CustomerName`, `TotalPrice`, `Status`, `TableId`) VALUES ('1', '2016/06/13', 'customer','50000', 1, '1')
+INSERT INTO `coffeeshop`.`receipt` (`EmployeeId`, `Date`, `CustomerName`, `TotalPrice`, `Status`, `TableId`) VALUES ('1', '2016/06/13', 'customer','55000', 1, '2')
+INSERT INTO `coffeeshop`.`receipt` (`EmployeeId`, `Date`, `CustomerName`, `TotalPrice`, `Status`, `TableId`) VALUES ('1', '2016/06/14', 'customer','85000', 1, '2')
 /*!40000 ALTER TABLE `receipt` ENABLE KEYS */;
 UNLOCK TABLES;
 

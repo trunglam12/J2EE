@@ -2,6 +2,11 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/D:/workspace/J2EE/Do%20An%20J2EE/Coffee/Coffee-ejb/src/java/SessionBean/ReceiptFacade.java</file>
+            <file>file:/D:/workspace/J2EE/Do%20An%20J2EE/Coffee/Coffee-ejb/src/java/SessionBean/DetailreceiptFacade.java</file>
+            <file>file:/D:/workspace/J2EE/Do%20An%20J2EE/Coffee/Coffee-ejb/src/java/entities/Receipt.java</file>
+            <file>file:/D:/workspace/J2EE/Do%20An%20J2EE/Coffee/Coffee-ejb/src/java/entities/Detailreceipt.java</file>
+        </group>
     </open-files>
 </project-private>

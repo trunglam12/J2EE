@@ -12,7 +12,7 @@
             <h:outputScript name="js/highcharts.js" target="head"/>
             <h:outputScript name="js/exporting.js" target="head"/>
             
-            <h2>Coffee shop</h2>
+            <h2>Báo cáo doanh thu</h2>
             <h:form>
                 <div class="filter-group">
                     <label>Thời gian</label>
@@ -23,16 +23,16 @@
             </h:form>
             <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
             <script>
-                var series = #{reportBean.getSaleReport()}
+                var series = #{reportBean.getRevenueReport()}
                 var dates = #{reportBean.getCurrentListDateString().toString()}
                 $(document).ready(function () {
                     $(function () {
                         $('#container').highcharts({
                             chart: {
-                                type: 'spline'
+                                type: 'column'
                             },
                             title: {
-                                text: 'Doanh số #{reportBean.viewMode.label}'
+                                text: 'Doanh thu #{reportBean.viewMode.label}'
                             },
                             xAxis: {
                                 categories: dates,

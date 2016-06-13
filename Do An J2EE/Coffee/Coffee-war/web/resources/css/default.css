@@ -216,3 +216,25 @@ header {
 ul.alert {
     list-style: none;
 }
+
+.input{
+    box-sizing: border-box;
+    display: inline-block;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #555555;
+    vertical-align: middle;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+}
+
+.filter-group{
+    margin: 10px;
+    display: inline-block;
+}
+.filter-group label{
+    margin-right: 5px;
+}

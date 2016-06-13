@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Detailreceipt.findAll", query = "SELECT d FROM Detailreceipt d"),
     @NamedQuery(name = "Detailreceipt.findByReceiptId", query = "SELECT d FROM Detailreceipt d WHERE d.detailreceiptPK.receiptId = :receiptId"),
     @NamedQuery(name = "Detailreceipt.findByProductId", query = "SELECT d FROM Detailreceipt d WHERE d.detailreceiptPK.productId = :productId"),
+    @NamedQuery(name = "Detailreceipt.findByReceiptIdAndProductId", query = "SELECT d FROM Detailreceipt d WHERE d.detailreceiptPK.receiptId = :receiptId AND d.product.productId = :productId"),
     @NamedQuery(name = "Detailreceipt.findByCount", query = "SELECT d FROM Detailreceipt d WHERE d.count = :count")})
 public class Detailreceipt implements Serializable {
     private static final long serialVersionUID = 1L;

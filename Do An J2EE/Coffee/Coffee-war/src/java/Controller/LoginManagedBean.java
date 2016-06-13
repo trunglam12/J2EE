@@ -81,7 +81,7 @@ public class LoginManagedBean {
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", username);
-            return "/Product/ProductManagement?face-redirect=true";
+            return "/index?face-redirect=true";
         }
         else{
             FacesMessage facemsg= new FacesMessage(FacesMessage.SEVERITY_ERROR, "Tên tài khoản hoặc mật khẩu không chính xác", "Tên tài khoản hoặc mật khẩu không chính xác");
@@ -102,7 +102,7 @@ public class LoginManagedBean {
             if(userFacade.Register(username, md5(password))){
                 HttpSession session = request.getSession();
                 session.setAttribute("user", username);
-                return "/Product/ProductManagement?face-redirect=true";
+                return "/index?face-redirect=true";
             }
             else{
                 FacesMessage facemsg= new FacesMessage(FacesMessage.SEVERITY_ERROR, "Có lỗi xảy ra khi thực hiện yêu cầu của bạn", "Có lỗi xảy ra khi thực hiện yêu cầu của bạn");

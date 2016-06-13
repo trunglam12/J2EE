@@ -39,6 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Receipt.findAll", query = "SELECT r FROM Receipt r"),
     @NamedQuery(name = "Receipt.findByReceiptId", query = "SELECT r FROM Receipt r WHERE r.receiptId = :receiptId"),
     @NamedQuery(name = "Receipt.findByDate", query = "SELECT r FROM Receipt r WHERE r.date = :date"),
+    @NamedQuery(name = "Receipt.findByMonth", query = "SELECT r FROM Receipt r WHERE FUNC('MONTH',r.date) = :month AND FUNC('YEAR',r.date) = :year"),
     @NamedQuery(name = "Receipt.findByCustomerName", query = "SELECT r FROM Receipt r WHERE r.customerName = :customerName"),
     @NamedQuery(name = "Receipt.findByTotalPrice", query = "SELECT r FROM Receipt r WHERE r.totalPrice = :totalPrice"),
     @NamedQuery(name = "Receipt.findByStatus", query = "SELECT r FROM Receipt r WHERE r.status = :status")})

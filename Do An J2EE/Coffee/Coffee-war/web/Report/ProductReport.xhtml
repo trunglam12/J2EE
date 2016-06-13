@@ -12,7 +12,7 @@
             <h:outputScript name="js/highcharts.js" target="head"/>
             <h:outputScript name="js/exporting.js" target="head"/>
             
-            <h2>Coffee shop</h2>
+            <h2>Báo cáo sản phẩm</h2>
             <h:form>
                 <div class="filter-group">
                     <label>Thời gian</label>
@@ -32,7 +32,7 @@
                                 type: 'spline'
                             },
                             title: {
-                                text: 'Doanh số #{reportBean.viewMode.label}'
+                                text: 'Doanh số sản phẩm #{reportBean.viewMode.label}'
                             },
                             xAxis: {
                                 categories: dates,
