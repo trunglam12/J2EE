@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Lam
+ * @author CHRIST
  */
 @Entity
 @Table(name = "receiptnote")
@@ -40,7 +40,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Receiptnote.findByDate", query = "SELECT r FROM Receiptnote r WHERE r.date = :date"),
     @NamedQuery(name = "Receiptnote.findByTotalCount", query = "SELECT r FROM Receiptnote r WHERE r.totalCount = :totalCount")})
 public class Receiptnote implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

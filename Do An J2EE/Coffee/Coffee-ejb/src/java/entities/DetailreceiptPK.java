@@ -13,11 +13,10 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author Lam
+ * @author CHRIST
  */
 @Embeddable
 public class DetailreceiptPK implements Serializable {
-
     @Basic(optional = false)
     @NotNull
     @Column(name = "ReceiptId")

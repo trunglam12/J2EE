@@ -6,25 +6,24 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Lam
+ * @author CHRIST
  */
 @Entity
 @Table(name = "tablecoffee")
@@ -33,10 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Tablecoffee.findAll", query = "SELECT t FROM Tablecoffee t"),
     @NamedQuery(name = "Tablecoffee.findByTableId", query = "SELECT t FROM Tablecoffee t WHERE t.tableId = :tableId"),
     @NamedQuery(name = "Tablecoffee.findByTableName", query = "SELECT t FROM Tablecoffee t WHERE t.tableName = :tableName"),
-    @NamedQuery(name = "Tablecoffee.findByStatus", query = "SELECT t FROM Tablecoffee t WHERE t.status = :status"),
-    @NamedQuery(name = "Tablecoffee.findByProductIds", query = "SELECT t FROM Tablecoffee t WHERE t.productIds = :productIds")})
+    @NamedQuery(name = "Tablecoffee.findByStatus", query = "SELECT t FROM Tablecoffee t WHERE t.status = :status")})
 public class Tablecoffee implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,11 +49,9 @@ public class Tablecoffee implements Serializable {
     @NotNull
     @Column(name = "Status")
     private boolean status;
-    @Size(max = 20)
-    @Column(name = "ProductIds")
-    private String productIds;
-    @OneToMany(mappedBy = "tableId")
-    private List<Receipt> receiptList;
+    @JoinColumn(name = "ReceiptId", referencedColumnName = "ReceiptId")
+    @ManyToOne
+    private Receipt receiptId;
 
     public Tablecoffee() {
     }
@@ -95,21 +90,12 @@ public class Tablecoffee implements Serializable {
         this.status = status;
     }
 
-    public String getProductIds() {
-        return productIds;
+    public Receipt getReceiptId() {
+        return receiptId;
     }
 
-    public void setProductIds(String productIds) {
-        this.productIds = productIds;
-    }
-
-    @XmlTransient
-    public List<Receipt> getReceiptList() {
-        return receiptList;
-    }
-
-    public void setReceiptList(List<Receipt> receiptList) {
-        this.receiptList = receiptList;
+    public void setReceiptId(Receipt receiptId) {
+        this.receiptId = receiptId;
     }
 
     @Override
