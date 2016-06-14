@@ -73,6 +73,8 @@ public class ProviderManagedBean {
     
     public void removeProvider(){
         try{
+            if (provider.getReceiptnoteList() == null
+                    || provider.getReceiptnoteList().size() == 0)
             providerFacade.remove(provider);
         } catch (Exception ex){
             ex.printStackTrace();
