@@ -321,6 +321,7 @@ public class TableManagedBean {
 
                _table.setReceiptId(_receipt);
             }
+            
             tablecoffeeFacade.edit(_table);
         }
       catch(Exception e)
@@ -360,9 +361,11 @@ public class TableManagedBean {
        _employee = employeeFacade.find(_employee.getEmployeeId());
        _receipt.setEmployeeId(_employee);
        _table.setReceiptId(null);
+       _table.setStatus(true);
        tablecoffeeFacade.edit(_table);
        
       receiptFacade.edit(_receipt);
+      _receipt = new Receipt();
    }
 
     public String GetPrice()
