@@ -38,17 +38,17 @@ public class Detailreceiptnote implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "Price")
-    private long price;
+    protected long price;
     @Basic(optional = false)
     @NotNull
     @Column(name = "Count")
-    private int count;
+    protected int count;
     @JoinColumn(name = "ProductId", referencedColumnName = "ProductId", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Product product;
+    protected Product product;
     @JoinColumn(name = "ReceiptNoteId", referencedColumnName = "ReceiptNoteId", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Receiptnote receiptnote;
+    protected Receiptnote receiptnote;
 
     public Detailreceiptnote() {
     }
