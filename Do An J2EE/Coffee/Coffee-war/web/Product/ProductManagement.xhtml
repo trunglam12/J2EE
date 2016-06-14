@@ -56,10 +56,18 @@
 
                     <rich:column >
                         <f:facet name="header" class="table-th">
-                            <h:outputText id="priceProduct" class="table-title" value="Giá" />
+                            <h:outputText id="priceProduct" class="table-title" value="Giá Bán" />
                         </f:facet>
 
                         <h:outputText class="table-row"  value="#{product.price}" />
+                    </rich:column>
+                    
+                     <rich:column >
+                        <f:facet name="header" class="table-th">
+                            <h:outputText id="originalPriceProduct" class="table-title" value="Giá vốn" />
+                        </f:facet>
+
+                         <h:outputText class="table-row"  value="#{product.ogrinalPrice}" />
                     </rich:column>
                     <rich:column filter="#{productManagedBean.groupFilter}"
                                  filterType="custom">
@@ -84,7 +92,7 @@
                         </f:facet>
                         <a4j:commandButton class="btn btn-default" value="Cập nhật" execute="@this" resetValues="true" 
                                            action="#{productManagedBean.GetProduct(product)}"
-                                           render="updateProductGrid price count productName groupProduct unitProduct"         
+                                           render="updateProductGrid price count productName groupProduct unitProduct priceOriginal"         
                                            oncomplete="#{rich:component('popupUpdateProduct')}.show()"> 
 
 
@@ -148,11 +156,19 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label-product"> Giá          : </label>
+                                <label class="form-label-product"> Giá bán         : </label>
                                 <div class="col-md-10">
-                                    <h:inputText id="price" required="true" validatorMessage="Giá sản phẩm không hợp lệ!" requiredMessage="Giá là bắt buộc phải nhập!" value="#{productManagedBean.product.price}" 
+                                    <h:inputText id="price" required="true" validatorMessage="Giá bán sản phẩm không hợp lệ!" requiredMessage="Giá bán là bắt buộc phải nhập!" value="#{productManagedBean.product.price}" 
                                                  class = "form-control" converterMessage="Giá sản phẩm là kiểu số."/> 
                                     <rich:message id="priceMsg" for="price" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label-product"> Giá  vốn        : </label>
+                                <div class="col-md-10">
+                                    <h:inputText id="priceOriginal" required="true" validatorMessage="Giá vốn sản phẩm không hợp lệ!" requiredMessage="Giá vốn là bắt buộc phải nhập!" value="#{productManagedBean.product.ogrinalPrice}" 
+                                                 class = "form-control" converterMessage="Giá vốn sản phẩm là kiểu số."/> 
+                                    <rich:message id="priceOriginalMsg" for="priceOriginal" />
                                 </div>
                             </div>
 
@@ -224,12 +240,19 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label-product"> Giá          : </label>
+                                <label class="form-label-product"> Giá Bán         : </label>
                                 <div class="col-md-10">
-                                    <h:inputText id="price" value="#{productManagedBean.insProduct.price}" required="true" requiredMessage="giá là bắt buộc phải nhập!" class = "form-control" converterMessage="Price is number."/>  
+                                    <h:inputText id="price" value="#{productManagedBean.insProduct.price}" required="true" requiredMessage="giá bán là bắt buộc phải nhập!" class = "form-control" converterMessage="Giá bán là một số."/>  
                                     <rich:message id="priceMsg" for="price" />
                                 </div>
-                            </div>                          
+                            </div>          
+                             <div class="form-group">
+                                <label class="form-label-product"> Giá  vốn        : </label>
+                                <div class="col-md-10">
+                                    <h:inputText id="priceOriginal" value="#{productManagedBean.insProduct.ogrinalPrice}" required="true" requiredMessage="giá vốn là bắt buộc phải nhập!" class = "form-control" converterMessage="giá vốn là một số."/>  
+                                    <rich:message id="priceOriginalMsg" for="priceOriginal" />
+                                </div>
+                            </div>   
                             <div class="form-group">
                                 <label class="form-label-product">Số lượng     :</label>
                                 <div class="col-md-10">

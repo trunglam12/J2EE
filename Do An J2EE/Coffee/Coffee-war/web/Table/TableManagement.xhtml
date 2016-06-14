@@ -36,10 +36,7 @@
                         <h:outputText value="#{tableManagedBean.GetStatus(table.status)}"  />
                     </rich:column>
                     
-                       <rich:column>
-                        <f:facet name="header">Danh sách món đã gọi</f:facet>
-                        <h:outputText value="#{table.productIds}"  />
-                    </rich:column>
+                     
                     
                     <rich:column>
                         <f:facet name="header">Cập nhật</f:facet>
@@ -47,15 +44,13 @@
                                            action="#{tableManagedBean.GetTable(table)}"            
                                            render="tableName tableStatus ProductListId"         
                                oncomplete="#{rich:component('popupUpdateTable')}.show()"> 
-                         
-                       
                         </a4j:commandButton>
                     </rich:column>
                     
                      <rich:column>
                         <f:facet name="header">Đặt món</f:facet>
                         <a4j:commandButton class="btn btn-default" value="Đặt món" execute="@this" resetValues="true" 
-                                           action="#{tableManagedBean.GetTable(table)}"            
+                                           action="#{tableManagedBean.InitOrder(table)}"            
                                                 
                                oncomplete="#{rich:component('productTablePopup')}.show()"> 
                         </a4j:commandButton>
@@ -66,11 +61,19 @@
                         
                         <a4j:commandButton class="btn btn-default" value="Danh sách món đã đặt" execute="@this" resetValues="true" 
                                            action="#{tableManagedBean.GetListProductOrder(table)}"
-                                           render="productTableOrderPopup"
-                                           oncomplete="#{rich:component('productTableOrderPopup')}.show()"> 
+                                           render="productTableOrderedPopup countProductOrder"
+                                           oncomplete="#{rich:component('productTableOrderedPopup')}.show()"> 
                         </a4j:commandButton>
                     </rich:column>
-                    
+                    <rich:column>
+                        <f:facet name="header">Hóa đơn</f:facet>
+                        <a4j:commandButton class="btn btn-default" value="Hóa đơn" execute="@this" resetValues="true" 
+                                        action="#{tableManagedBean.GetListProductOrder(table)}"       
+                                                render="receiptPopup totalPrice countProductOrdered priceProductOrder productName
+                                                customerId idReceipt dateReceiptId"
+                                          oncomplete="#{rich:component('receiptPopup')}.show()"> 
+                        </a4j:commandButton>
+                    </rich:column>
                     <rich:column>
                         <f:facet name="header">Xóa</f:facet>
                         <a4j:commandButton class="btn btn-default" value="Xóa" execute="@this" resetValues="true" 
@@ -86,46 +89,35 @@
                 </rich:dataTable>
                 </h:form>
            
-            <rich:popupPanel id="productTableOrderPopup" autosized="true">
-                            <f:facet name="header">
-                          <h:outputText value="Đặt món" />
+            <rich:popupPanel id="productTableOrderedPopup" autosized="true">
+                      <f:facet name="header">
+                          <h:outputText value="Xóa món" />
                       </f:facet>
                       <f:facet name="controls">
-                          <h:outputLink value="#" onclick="#{rich:component('productTableOrderPopup')}.hide(); return false;" style="color: inherit">
+                          <h:outputLink value="#" onclick="#{rich:component('productTableOrderedPopup')}.hide(); return false;" style="color: inherit">
                               X
                           </h:outputLink>
                       </f:facet>
                         
                      <h:form >
-                         <rich:dataTable  class="table table-striped" value="#{tableManagedBean.listProductOrder}" 
+                         <rich:dataTable  class="table table-striped" value="#{tableManagedBean.listDetailReceipt}" 
                                        var="product" iterationStatusVar="it" id="tableProductOrder" rows="6" 
                                        >
-                          <rich:column filter="#{productManagedBean.productNameFilter}"
-                                       filterType="custom">   				
+                          <rich:column >   				
                               <f:facet name="header">
                                   <h:panelGroup id="filterName">
                                       <h:outputText class="table-title" value="Tên sản phẩm" />
-                                      <br></br>
-                                      <h:inputText class="form-control" id="productNameOrder" value="#{productManagedBean.productName}" >
-                                          <a4j:ajax render="tableProductOrder" execute="@this" event="blur"/>
-                                      </h:inputText >
+                                     
                                   </h:panelGroup>
                               </f:facet>    	        
-                              <h:outputText class="table-row" value="#{product.productName}"  />
+                              <h:outputText class="table-row" value="#{product.product.productName}"  />
                           </rich:column>
 
-                          <rich:column filterValue="#{productManagedBean.productStatus}"
-                                       filterExpression="#{fn:containsIgnoreCase(product.status, productManagedBean.productStatus)}"
-                                       filterType="custom">
+                          <rich:column >
                               <f:facet name="header">
                                   <h:panelGroup>
                                       <h:outputText class="table-title" value=" Số lượng" />
-                                       <br></br>
-                                      <h:selectOneMenu id="countOrder" class="form-control" value="#{productManagedBean.productStatus}" >
-                                           <f:selectItem  itemValue="true" itemLabel="Còn Hàng" />
-                                            <f:selectItem itemValue="false" itemLabel="Hết Hàng" />
-                                          <a4j:ajax render="tableProductOrder" execute="@this" event="change"/>
-                                      </h:selectOneMenu>
+                                      
                                  </h:panelGroup>
                               </f:facet>
                               <h:outputText class="table-row" value="#{product.count}"   />
@@ -136,30 +128,35 @@
                                   <h:outputText  class="table-title" value="Giá" />
                               </f:facet>
 
-                              <h:outputText class="table-row" id="priceProductOrder" value="#{product.price}" />
+                              <h:outputText class="table-row" id="priceProductOrder" value="#{product.product.price}" />
                           </rich:column>
-                          
+                             
                           <rich:column >
                               <f:facet name="header" class="table-th">
                                   <h:outputText id="imgURLOrder" class="table-title" value="Hình ảnh" />
                               </f:facet>
 
-                              <h:graphicImage library="images" style="width:50px;height:50px" name="#{product.image}"/>
+                              <h:graphicImage library="images" style="width:50px;height:50px" name="#{product.product.image}"/>
                           </rich:column>
-                          <rich:column filter="#{productManagedBean.groupFilter}"
-                                       filterType="custom">
+                          <rich:column >
                               <f:facet name="header">
                                   <h:panelGroup>
                                       <h:outputText class="table-title" value="Danh mục" />
-                                       <br></br>
-                                      <h:selectOneMenu class="form-control" value="#{productManagedBean.filterGroup.groupId}" >
-                                          <f:selectItems value="#{productManagedBean.GetAllGroupFilter()}"
-                                                         var="group" itemLabel="#{group.groupName}" itemValue="#{group.groupId}" />
-                                          <a4j:ajax render="tableProductOrder" execute="@this" event="change"/>
-                                      </h:selectOneMenu>
+                                     
                                   </h:panelGroup>
                               </f:facet>
-                              <h:outputText class="table-row" value="#{product.groupId.groupName}"  />
+                              <h:outputText class="table-row" value="#{product.product.groupId.groupName}"  />
+                          </rich:column>
+                             
+                          <rich:column >
+                              <f:facet name="header" class="table-th">
+                                  <h:outputText  class="table-title" value="Số lượng đặt" />
+                              </f:facet>
+                              <h:inputText class="form-control" id="countProductOrder" validatorMessage="Phải nhập số" required="true"
+                                            requiredMessage="Phải nhập trường này!" value="#{tableManagedBean.numberProductOrder}" >
+                                <a4j:ajax render="tableProduct" execute="countProductOrder" event="change"/>
+                               </h:inputText>
+                               <h:message for="countProductOrder"></h:message>
                           </rich:column>
 
                           <rich:column >
@@ -167,10 +164,10 @@
                                    <h:outputText class="table-title" value="Xóa món" />
                                    
                               </f:facet>
-                              <a4j:commandButton class="btn btn-default" value="Xóa món" execute="@this" resetValues="true" 
-                                                 action="#{tableManagedBean.RemoveOrder(product)}"
-                                                 render="tableProductOrder priceOrder countOrder productNameOrder groupProductOrder unitProductOrder
-                                                 imgURLOrder"   
+                              <a4j:commandButton class="btn btn-default" value="Xóa món" execute="productTableOrderedPopup" resetValues="true" 
+                                                 action="#{tableManagedBean.RemoveOrder(product.product)}"
+                                                 render="tableProductOrder countProductOrdered priceOrder countOrder productNameOrder groupProductOrder unitProductOrder
+                                                 imgURLOrder"    
                                                  oncomplete="#{rich:component('messagePaneRemove')}.show()"> 
                               </a4j:commandButton>
                           </rich:column>
@@ -181,10 +178,10 @@
                       </rich:dataTable>
                       
                     
-                    <a4j:commandButton  class="btn btn-default" value="Thoát" onclick="#{rich:component('productTableOrderPopup')}.hide(); return false;" />
-                    <a4j:commandButton value="Lưu" style="margin-left: 25px" action="#{tableManagedBean.EditTable()}"  class="btn btn-default" render="tableTable" execute="productTableOrderPopup"
+                    <a4j:commandButton  class="btn btn-default" value="Thoát" onclick="#{rich:component('productTableOrderedPopup')}.hide(); return false;" />
+                    <a4j:commandButton value="Lưu" style="margin-left: 25px" action="#{tableManagedBean.EditListOrder()}"  class="btn btn-default" render="tableTable" execute="productTableOrderedPopup"
                                            oncomplete="if (#{facesContext.validationFailed==false}) 
-                                           #{rich:component('productTableOrderPopup')}.hide();">
+                                           #{rich:component('productTableOrderedPopup')}.hide();">
                    </a4j:commandButton>
                      </h:form>
                  </rich:popupPanel>
@@ -199,7 +196,7 @@
                           </h:outputLink>
                       </f:facet>
                         
-                     <h:form >
+                     <h:form>
                       <rich:dataTable  class="table table-striped" value="#{productManagedBean.GetAllProduct()}" 
                                        var="product" iterationStatusVar="it" id="tableProduct" rows="6" 
                                        >
@@ -265,14 +262,25 @@
                               <h:outputText class="table-row" value="#{product.groupId.groupName}"  />
                           </rich:column>
 
+                           <rich:column >
+                              <f:facet name="header" class="table-th">
+                                  <h:outputText  class="table-title" value="Số lượng đặt" />
+                              </f:facet>
+                               <h:inputText class="form-control" id="countProductOrder" validatorMessage="Phải nhập số" required="true"
+                                            requiredMessage="Phải nhập trường này!" value="#{tableManagedBean.numberProductOrder}" >
+                                <a4j:ajax render="tableProduct" execute="countProductOrder" event="change"/>
+                               </h:inputText>
+                               <h:message for="countProductOrder"></h:message>
+                          </rich:column>
+                          
                           <rich:column >
                               <f:facet name="header">
                                    <h:outputText class="table-title" value="Đặt món" />
                                     <h:message class="form-control" for="priceProduct" />
                               </f:facet>
-                              <a4j:commandButton class="btn btn-default" value="Đặt món" execute="@this" resetValues="true" 
+                              <a4j:commandButton class="btn btn-default" value="Đặt món" execute="productTablePopup" 
                                                  action="#{tableManagedBean.Order(product)}"
-                                                 render="updateProductGrid price count productName groupProduct unitProduct imgURL"   
+                                                 render="tableProduct price count productName groupProduct unitProduct imgURL countProductOrder"   
                                                  oncomplete="#{rich:component('messagePaneOrder')}.show()"> 
                               </a4j:commandButton>
                           </rich:column>
@@ -292,6 +300,7 @@
                      </rich:popupPanel>
                 
              <h:form>
+                 <!-- popup xóa bán message-->
                   <rich:popupPanel id="confirmPane" autosized="true">
                             <f:facet name="header">
                           <h:outputText value="Xóa bàn" />
@@ -310,6 +319,7 @@
                                        #{rich:component('confirmPane')}.hide();"/>
                      </rich:popupPanel>
                 
+                  <!-- popup đặt món message-->
                     <rich:popupPanel id="messagePaneOrder" autosized="true">
                             <f:facet name="header">
                           <h:outputText value="Đặt món" />
@@ -325,6 +335,23 @@
                     <a4j:commandButton value="OK" class="btn btn-default"
                                        render="@productTablePopup" execute="messagePaneOrder"
                                        oncomplete="#{rich:component('messagePaneOrder')}.hide()"/>
+                     </rich:popupPanel>
+                  
+                   <rich:popupPanel id="messageSaveOrder" autosized="true">
+                            <f:facet name="header">
+                          <h:outputText value="Đặt món" />
+                      </f:facet>
+                      <f:facet name="controls">
+                          <h:outputLink value="#" onclick="#{rich:component('messageSaveOrder')}.hide(); return false;" style="color: inherit">
+                              X
+                          </h:outputLink>
+                      </f:facet>
+                        
+                    Bạn đã lưu hóa đơn thành công!
+                
+                    <a4j:commandButton value="OK" class="btn btn-default"
+                                       render="@receiptPopup" execute="messageSaveOrder"
+                                       oncomplete="#{rich:component('messageSaveOrder')}.hide()"/>
                      </rich:popupPanel>
                 
                      <rich:popupPanel id="messagePaneRemove" autosized="true">
@@ -377,13 +404,7 @@
                                     </div>
                                 </div>
                                 
-                                <div class="form-group">
-                                    <label class="form-label-product">Danh sách món đã gọi :</label>
-                                    <div class="col-md-10">
-                                        <h:inputText id="ProductListId" class="form-control"  value="#{tableManagedBean.table.productIds}"/>
-                                          <rich:message id="ProductListIdMsg" for="ProductListId" />
-                                    </div>
-                                </div>
+                                
                               
                             </h:panelGrid>
                             <br></br><br></br>
@@ -412,7 +433,7 @@
                 <center>
                     <h:form>
                         <h1 class="form-title-product"> Thêm thông tin bàn mới</h1>
-                        <h:panelGrid columns="3" class="panel-collapse" id="addTableGrid">
+                        <h:panelGrid columns="3" class="panel-collapse"  id="addTableGrid">
                            <div class="form-group">
                                     <label class="form-label-product">Tên bàn :</label>
                                     <div class="col-md-10">
@@ -433,16 +454,7 @@
                                          <rich:message id="tableStatusMsg" for="tableStatus" />
                                     </div>
                                 </div>
-                                
-                                <div class="form-group">
-                                    <label class="form-label-product">Danh sách món đã gọi :</label>
-                                    <div class="col-md-10">
-                                        <h:inputText id="ProductListId" class= "form-control"  
-                                                     value="#{tableManagedBean.table.productIds}"/>
-                                          <rich:message id="ProductListIdMsg" for="ProductListId" />
-                                    </div>
-                                </div>
-                           
+ 
                         </h:panelGrid>
                         <br></br><br></br>
                         
@@ -455,6 +467,131 @@
                     </h:form>
                 </center>
             </rich:popupPanel>
+            <!-- Receipt-->
+            
+             <rich:popupPanel id="receiptPopup" autosized="true">
+                
+                      <f:facet name="header">
+                          <h:outputText value="Hóa đơn" />
+                      </f:facet>
+                      <f:facet name="controls">
+                          <h:outputLink value="#" onclick="#{rich:component('receiptPopup')}.hide(); return false;" style="color: inherit">
+                              X
+                          </h:outputLink>
+                      </f:facet>
+                        
+                     <h:form >
+                         <div id="receiptPrint">
+                             
+                        <center>
+                             
+                         <h1 class="form-title-product"> Hóa đơn thanh toán</h1>  
+                         
+                           <h:panelGrid columns="2" class="panel-collapse"  id="receiptGrid">
+                          
+                               <div class="form-group">
+                                    <label class="form-label-product">Mã hóa đơn</label>
+                                    <div class="col-md-10">
+                                        <h:outputLabel  value="#{tableManagedBean.receipt.receiptId}" id="idReceipt"
+                                       class="receipt-label-style" />
+                                    </div>
+                           </div>
+                               
+                           <div class="form-group">
+                                    <label class="form-label-product">Ngày lập hóa đơn</label>
+                                    <div class="col-md-10">
+                                        <h:outputLabel style="padding-left: 10px"  value="#{tableManagedBean.receipt.date}" id="dateReceiptId"
+                                       class="receipt-label-style" />
+                                    </div>
+                           </div>
+                            
+                           <div class="form-group">
+                                    <label class="form-label-product">Tên khách hàng</label>
+                                    <div class="col-md-10">
+                                        <h:inputText style="padding-left: 20px"  value="#{tableManagedBean.receipt.customerName}" id="customerId"
+                                       class="form-control" />
+                                    </div>
+                           </div>
+                           <div class="form-group">
+                                    <label class="form-label-product">Nhân viên</label>
+                                    <div class="col-md-10">
+                                        <h:selectOneMenu id="tableStatus" value="#{tableManagedBean.employee.employeeId}"
+                                                         class="form-control">
+                                            <f:selectItems value="#{tableManagedBean.GetAllEmployee()}" var="employ" itemLabel="#{employ.employeeName}" itemValue="#{employ.employeeId}" />
+                                        </h:selectOneMenu>
+                                    </div>
+                                </div>
+                        </h:panelGrid>
+                        
+                         <br></br> 
+                         
+                         <rich:dataTable   value="#{tableManagedBean.listDetailReceipt}" 
+                                       var="product"  id="tableProductOrder" 
+                                       >
+                          <rich:column >   				
+                              <f:facet name="header">
+                                  <h:panelGroup id="filterName">
+                                      <h:outputText class="table-title" value="Tên sản phẩm" />
+                                     
+                                  </h:panelGroup>
+                              </f:facet>    	        
+                              <h:outputText id="productName" class="table-row" value="#{product.product.productName}"  />
+                          </rich:column>
+
+                          <rich:column >
+                              <f:facet name="header" class="table-th">
+                                  <h:outputText  class="table-title" value="Giá" />
+                              </f:facet>
+
+                              <h:outputText class="table-row" id="priceProductOrder" value="#{product.product.price}" />
+                          </rich:column>
+                             
+                         
+                          <rich:column >
+                              <f:facet name="header">
+                                  <h:panelGroup>
+                                      <h:outputText class="table-title" value="Danh mục" />
+                                     
+                                  </h:panelGroup>
+                              </f:facet>
+                              <h:outputText class="table-row" value="#{product.product.groupId.groupName}"  />
+                          </rich:column>
+                             
+                          <rich:column >
+                              <f:facet name="header" class="table-th">
+                                  <h:outputText  class="table-title" value="Số lượng đặt" />
+                              </f:facet>
+                              <h:outputText class="receipt-label-style" id="countProductOrdered" value="#{product.count}" />
+                          </rich:column>
+
+                      </rich:dataTable>
+                         <br></br>
+                         
+                      <h:panelGrid columns="2" class="panel-collapse"  id="receiptGrid1">
+                           <div class="form-group">
+                                    <label class="form-label-product">Tổng số tiền Số tiền:</label>
+                                    <div class="col-md-10">
+                                        <h:outputLabel id="totalPrice" style="padding-left: 25px" value="#{tableManagedBean.GetPrice()}"
+                                       class="receipt-label-style" />
+                                        
+                                    </div>
+                           </div>
+                      </h:panelGrid>
+                         </center>
+                      </div>
+                    <a4j:commandButton  class="btn btn-default" value="Thoát" onclick="#{rich:component('receiptPopup')}.hide(); return false;" />
+                    
+                    <a4j:commandButton value="Lưu" style="margin-left: 25px" action="#{tableManagedBean.SaveReceipt()}"  class="btn btn-default" 
+                                       render="tableTable" execute="receiptPopup"
+                                       >
+                   </a4j:commandButton>
+                    
+                    <a4j:commandButton value="In hóa đơn" style="margin-left: 25px" onclick="printDiv('receiptPrint')" class="btn btn-default"
+                                          >
+                   </a4j:commandButton>
+                     </h:form>
+                   
+                 </rich:popupPanel>
         </ui:define>
     </ui:composition>
 </html>
