@@ -1,0 +1,200 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+
+    <ui:composition template="/WEB-INF/templates/template.xhtml">
+        <ui:define name="content">
+
+            <h3 class="form-title-product">Quản lý nhân viên</h3>
+
+            <a4j:commandButton class="btn btn-default" value="Thêm nhân viên mới" 
+                               oncomplete="#{rich:component('popupAddEmployee')}.show()"> 
+            </a4j:commandButton>
+            <br></br><br></br>
+            <h:form id="form">
+                <rich:dataTable  class="table table-striped" value="#{employeeBean.GetAllEmployee()}" 
+                                 var="employee" id="tableEmployee" rows="10">
+                    <rich:column>    				
+                        <f:facet name="header">Mã nhân viên</f:facet>    	        
+                        <h:outputText value="#{employee.employeeId}"/>
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Tên nhân viên</f:facet>
+                        <h:outputText value="#{employee.employeeName}"/>
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Địa chỉ</f:facet>
+                        <h:outputText value="#{employee.address}"/>
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Điện thoại</f:facet>
+                        <h:outputText value="#{employee.phone}"/>
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Vai trò</f:facet>
+                        <h:outputText value="#{employee.role}"/>
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Cập nhật</f:facet>
+                        <a4j:commandButton class="btn btn-default" value="Cập nhật" execute="@this" resetValues="true" 
+                                           action="#{employeeBean.GetEmployee(employee)}"
+                                           render="employeeName employeeAddress employeePhone employeeRole"         
+                                           oncomplete="#{rich:component('popupUpdateEmployee')}.show()"> 
+                        </a4j:commandButton>
+                    </rich:column>
+                    <rich:column>
+                        <f:facet name="header">Xóa</f:facet>
+                        <a4j:commandButton class="btn btn-default" value="Xóa" execute="@this" resetValues="true" 
+                                           action="#{employeeBean.GetEmployee(employee)}"
+                                           oncomplete="#{rich:component('confirmPane')}.show()"> 
+
+                        </a4j:commandButton>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller page="#{employeeBean.page}" fastStep="3"/>
+                    </f:facet>
+                </rich:dataTable>
+            </h:form>
+            <h:form>
+                <rich:popupPanel id="confirmPane" autosized="true">
+                    <f:facet name="header">
+                        <h:outputText value="Xóa nhân viên" />
+                    </f:facet>
+                    <f:facet name="controls">
+                        <h:outputLink value="#" onclick="#{rich:component('confirmPane')}.hide(); return false;" style="color: inherit">
+                            X
+                        </h:outputLink>
+                    </f:facet>
+
+                    Bạn có muốn xóa nhân viên này không?
+                    <a4j:commandButton value="Không" onclick="#{rich:component('confirmPane')}.hide(); return false;" />
+                    <a4j:commandButton value="Có" action="#{employeeBean.RemoveEmployee()}"
+                                       render="tableEmployee" execute="confirmPane"
+                                       oncomplete="if (#{facesContext.validationFailed==false}) 
+                                       #{rich:component('confirmPane')}.hide();"/>
+                </rich:popupPanel>
+            </h:form>
+            <h:form>
+                <rich:popupPanel id="popupUpdateEmployee"  domElementAttachment="parent" autosized="true" resizeable="false">
+                    <f:facet name="header">
+                        <h:outputText value="Cập nhật nhân viên" />
+                    </f:facet>
+                    <f:facet name="controls">
+                        <h:outputLink value="#" onclick="#{rich:component('popupUpdateEmployee')}.hide(); return false;" style="color: inherit">
+                            X
+                        </h:outputLink>
+                    </f:facet>                   
+                    <center>
+                        <h1 class="form-title-product">Cập nhật nhân viên</h1>
+                        <h:panelGrid columns="3" class="panel-collapse" id="addEmployeeGrid">
+                            <div class="form-group">
+                                <label class="form-label-product">Tên nhân viên:</label>
+                                <div class="col-md-10">
+                                    <h:inputText id="employeeName" required="true" validatorMessage="Tên nhân viên không hợp lệ! " requiredMessage="Tên nhân viên là bắt buộc phải nhập!" value="#{employeeBean.employee.employeeName}" class= "form-control"/>
+                                    <rich:message id="employeeNameMsg" for="employeeName" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label-product">Địa chỉ:</label>
+                                <div class="col-md-10">
+                                    <h:inputText id="employeeAddress" required="true" validatorMessage="Địa chỉ! " requiredMessage="Địa chỉ là bắt buộc phải nhập!" value="#{employeeBean.employee.address}" class= "form-control"/>
+                                    <rich:message id="employeeAddressMsg" for="employeeAddress" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label-product">Điện thoại:</label>
+                                <div class="col-md-10">
+                                    <h:inputText id="employeePhone" required="true" validatorMessage="Điện thoại! " requiredMessage="Điện thoại là bắt buộc phải nhập!" value="#{employeeBean.employee.phone}" class= "form-control"/>
+                                    <rich:message id="employeePhoneMsg" for="employeePhone" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label-product">Vai trò:</label>
+                                <div class="col-md-10">
+                                    <h:inputText id="employeeRole" validatorMessage="Điện thoại! " value="#{employeeBean.employee.role}" class= "form-control"/>
+                                    <rich:message id="employeeRoleMsg" for="employeeRole" />
+                                </div>
+                            </div>
+                        </h:panelGrid>
+                        <br></br><br></br>
+
+                        <a4j:commandButton value="Cập nhật" action="#{employeeBean.EditEmployee()}"  class="btn btn-default" render="tableEmployee" execute="popupUpdateEmployee"
+                                           oncomplete="if (#{facesContext.validationFailed==false}) 
+                                           #{rich:component('popupUpdateEmployee')}.hide();">
+                        </a4j:commandButton>
+                        <h:commandButton style="margin-left: 25px" value="Hủy bỏ"  onclick="#{rich:component('popupUpdateEmployee')}.hide(); return false;" class="btn btn-default"/>
+                        <br></br>
+                    </center>
+
+                </rich:popupPanel>
+            </h:form>
+
+            <rich:popupPanel id="popupAddEmployee" modal="false" autosized="true" resizeable="false">
+                <f:facet name="header">
+                    <h:outputText value="Thêm mới nhân viên" />
+                </f:facet>
+                <f:facet name="controls">
+                    <h:outputLink value="#" onclick="#{rich:component('popupAddEmployee')}.hide(); return false;" style="color: inherit">
+                        X
+                    </h:outputLink>
+                </f:facet>
+                <center>
+                    <h:form>
+                        <h1 class="form-title-product"> Thêm mới nhân viên</h1>
+                        <h:panelGrid columns="3" class="panel-collapse" id="addEmployeeGrid">
+                            <div class="form-group">
+                                <label class="form-label-product">Tên nhân viên:</label>
+                                <div class="col-md-10">
+                                    <h:inputText id="employeeName" required="true" validatorMessage="Tên nhân viên không hợp lệ! " requiredMessage="Tên nhân viên là bắt buộc phải nhập!" value="#{employeeBean.newEmployee.employeeName}" class= "form-control"/>
+                                    <rich:message id="employeeNameMsg" for="employeeName" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label-product">Địa chỉ:</label>
+                                <div class="col-md-10">
+                                    <h:inputText id="employeeAddress" required="true" validatorMessage="Địa chỉ! " requiredMessage="Địa chỉ là bắt buộc phải nhập!" value="#{employeeBean.newEmployee.address}" class= "form-control"/>
+                                    <rich:message id="employeeAddressMsg" for="employeeAddress" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label-product">Điện thoại:</label>
+                                <div class="col-md-10">
+                                    <h:inputText id="employeePhone" required="true" validatorMessage="Điện thoại! " requiredMessage="Điện thoại là bắt buộc phải nhập!" value="#{employeeBean.newEmployee.phone}" class= "form-control"/>
+                                    <rich:message id="employeePhoneMsg" for="employeePhone" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label-product">Vai trò:</label>
+                                <div class="col-md-10">
+                                    <h:inputText id="employeeRole" validatorMessage="Điện thoại! " value="#{employeeBean.newEmployee.role}" class= "form-control"/>
+                                    <rich:message id="employeeRoleMsg" for="employeeRole" />
+                                </div>
+                            </div>
+                        </h:panelGrid>
+                        <br></br><br></br>
+
+                        <a4j:commandButton value="Thêm mới" action="#{employeeBean.AddEmployee()}"  class="btn btn-default" 
+                                           render="tableEmployee" execute="popupAddEmployee"
+                                           oncomplete="if (#{facesContext.validationFailed==false})  {#{rich:component('popupAddEmployee')}.hide();}" />
+
+                        <h:commandButton style="margin-left: 25px" value="Hủy bỏ"  onclick="#{rich:component('popupAddEmployee')}.hide(); return false;" class="btn btn-default"/>
+
+                    </h:form>
+                </center>
+            </rich:popupPanel>
+        </ui:define>
+    </ui:composition>
+
+
+</html>
