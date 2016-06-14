@@ -7,8 +7,11 @@ package Controller;
 
 import POJO.HighChartReport;
 import SessionBean.DetailreceiptFacade;
+import SessionBean.DetailreceiptnoteFacade;
 import SessionBean.ProductFacade;
+import SessionBean.ProviderFacade;
 import SessionBean.ReceiptFacade;
+import SessionBean.ReceiptnoteFacade;
 import entities.Product;
 import entities.Receipt;
 import java.util.ArrayList;
@@ -16,6 +19,8 @@ import java.util.Calendar;
 import java.util.List;
 import javax.ejb.EJB;
 import com.google.gson.Gson;
+import entities.Provider;
+import entities.Receiptnote;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -56,7 +61,17 @@ public class ReportManagedBean {
 
     @EJB
     private ReceiptFacade receiptFacade;
+    
+    @EJB
+    private ProviderFacade providerFacade;
+    
+    @EJB
+    private ReceiptnoteFacade receiptnoteFacade;
+    
+    @EJB
+    private DetailreceiptnoteFacade detailreceiptnoteFacade;
 
+    
     private Date startDate;
 
     private Date endDate;
@@ -136,8 +151,9 @@ public class ReportManagedBean {
             Calendar cal = Calendar.getInstance();
             cal.setTime(endDate);
             int currentMonth = cal.get(Calendar.MONTH) + 1;
+            int currentYear = cal.get(Calendar.YEAR);
             for (int i = 0; i < currentMonth; i++) {
-                result.add(Integer.toString(i + 1));
+                result.add(Integer.toString(i + 1) + "/" + currentYear);
             }
         }
         Gson gson = new Gson();
@@ -164,7 +180,7 @@ public class ReportManagedBean {
                 HighChartReport item = new HighChartReport(product.getProductName());
                 for (Date day : listDay) {
                     int sum = 0;
-                    List<Receipt> dateRecipes = receiptFacade.GetDateRecipe(day);
+                    List<Receipt> dateRecipes = receiptFacade.GetRecipeByDate(day);
                     for (Receipt recipe : dateRecipes) {
                         sum += detailreceiptFacade.GetDetailByReceiptIdAndProductId(recipe.getReceiptId(), product.getProductId())
                                 .stream().mapToInt(o -> o.getCount()).sum();
@@ -183,7 +199,7 @@ public class ReportManagedBean {
                 HighChartReport item = new HighChartReport(product.getProductName());
                 for (int i = 0; i < currentMonth; i++) {
                     int sum = 0;
-                    List<Receipt> dateRecipes = receiptFacade.GetDateRecipeByMonth(i + 1, currentYear);
+                    List<Receipt> dateRecipes = receiptFacade.GetRecipeByMonth(i + 1, currentYear);
                     for (Receipt recipe : dateRecipes) {
                         sum += detailreceiptFacade.GetDetailByReceiptIdAndProductId(recipe.getReceiptId(), product.getProductId())
                                 .stream().mapToInt(o -> o.getCount()).sum();
@@ -214,23 +230,75 @@ public class ReportManagedBean {
             List<Date> dates = getDaysBetweenDates(startDate, endDate);
             HighChartReport item = new HighChartReport("Doanh thu");
             for (Date date : dates) {
-                List<Receipt> dateRecipes = receiptFacade.GetDateRecipe(date);
+                List<Receipt> dateRecipes = receiptFacade.GetRecipeByDate(date);
                 long sum = dateRecipes.stream().mapToLong(o -> o.getTotalPrice()).sum();
                 item.getData().add(sum);
             }
             result.add(item);
-        }
-        else{
+        } else {
             calendar.setTime(endDate);
             int currentMonth = calendar.get(Calendar.MONTH) + 1;
             int currentYear = calendar.get(Calendar.YEAR);
             HighChartReport item = new HighChartReport("Doanh thu");
             for (int i = 0; i < currentMonth; i++) {
-                List<Receipt> dateRecipes = receiptFacade.GetDateRecipeByMonth(i + 1, currentYear);
+                List<Receipt> dateRecipes = receiptFacade.GetRecipeByMonth(i + 1, currentYear);
                 long sum = dateRecipes.stream().mapToLong(o -> o.getTotalPrice()).sum();
                 item.getData().add(sum);
             }
             result.add(item);
+        }
+        Gson gson = new Gson();
+        return gson.toJson(result);
+    }
+
+    public String getImportReport() {
+        ArrayList<HighChartReport> result = new ArrayList<HighChartReport>();
+        Calendar calendar = Calendar.getInstance();
+        if (viewMode != ViewMode.ThisYear) {
+            switch (viewMode) {
+                case ThisMonth:
+                    calendar.add(Calendar.DAY_OF_MONTH, -30);
+                    startDate = calendar.getTime();
+                    break;
+                case ThisWeek:
+                    calendar.add(Calendar.DAY_OF_MONTH, -7);
+                    startDate = calendar.getTime();
+                    break;
+            }
+            List<Date> listDay = getDaysBetweenDates(startDate, endDate);
+            List<Product> products = productFacade.findAll();
+            for (Product product : products) {
+                HighChartReport item = new HighChartReport(product.getProductName());
+                for (Date day : listDay) {
+                    int sum = 0;
+                    List<Receiptnote> recipes = receiptnoteFacade.GetRecipeNoteByDate(day);
+                    for (Receiptnote recipe : recipes) {
+                        sum += detailreceiptnoteFacade.GetDetailByReceiptIdAndProductId(recipe.getReceiptNoteId(), product.getProductId())
+                                .stream().mapToInt(o -> o.getCount()).sum();
+                    }
+                    item.getData().add(new Long(sum));
+                }
+                result.add(item);
+            }
+        } else {
+            List<Product> products = productFacade.findAll();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(endDate);
+            int currentMonth = cal.get(Calendar.MONTH) + 1;
+            int currentYear = cal.get(Calendar.YEAR);
+            for (Product product : products) {
+                HighChartReport item = new HighChartReport(product.getProductName());
+                for (int i = 0; i < currentMonth; i++) {
+                    int sum = 0;
+                    List<Receiptnote> recipes = receiptnoteFacade.GetRecipeNoteByMonth(i + 1, currentYear);
+                    for (Receiptnote recipe : recipes) {
+                        sum += detailreceiptnoteFacade.GetDetailByReceiptIdAndProductId(recipe.getReceiptNoteId(), product.getProductId())
+                                .stream().mapToInt(o -> o.getCount()).sum();
+                    }
+                    item.getData().add(new Long(sum));
+                }
+                result.add(item);
+            }
         }
         Gson gson = new Gson();
         return gson.toJson(result);

@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Receiptnote.findAll", query = "SELECT r FROM Receiptnote r"),
     @NamedQuery(name = "Receiptnote.findByReceiptNoteId", query = "SELECT r FROM Receiptnote r WHERE r.receiptNoteId = :receiptNoteId"),
     @NamedQuery(name = "Receiptnote.findByDate", query = "SELECT r FROM Receiptnote r WHERE r.date = :date"),
+    @NamedQuery(name = "Receiptnote.findByMonth", query = "SELECT r FROM Receiptnote r WHERE FUNC('MONTH',r.date) = :month AND FUNC('YEAR',r.date) = :year"),
     @NamedQuery(name = "Receiptnote.findByTotalCount", query = "SELECT r FROM Receiptnote r WHERE r.totalCount = :totalCount")})
 public class Receiptnote implements Serializable {
     private static final long serialVersionUID = 1L;

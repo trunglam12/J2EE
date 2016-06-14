@@ -1,0 +1,179 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+
+    <ui:composition template="/WEB-INF/templates/template.xhtml">
+        <ui:define name="content">
+
+            <h3 class="form-title-product">Quản lý người dùng</h3>
+
+            <a4j:commandButton class="btn btn-default" value="Thêm người dùng mới" 
+                               oncomplete="#{rich:component('popupAddUser')}.show()"> 
+            </a4j:commandButton>
+            <br></br><br></br>
+            <h:form id="form">
+                <rich:dataTable  class="table table-striped" value="#{userBean.GetAllUser()}" 
+                                 var="user" id="tableUser" rows="10">
+                    <rich:column>    				
+                        <f:facet name="header">Mã người dùng</f:facet>    	        
+                        <h:outputText value="#{user.userId}"/>
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Tài khoản</f:facet>
+                        <h:outputText value="#{user.userAccount}"/>
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Nhân viên</f:facet>
+                        <h:outputText value="#{user.employeeId.employeeName}"/>
+                    </rich:column>
+
+                    <rich:column>
+                        <f:facet name="header">Cập nhật</f:facet>
+                        <a4j:commandButton class="btn btn-default" value="Cập nhật" execute="@this" resetValues="true" 
+                                           action="#{userBean.GetUser(user)}"         
+                                           oncomplete="#{rich:component('popupUpdateUser')}.show()"> 
+                        </a4j:commandButton>
+                    </rich:column>
+                    <rich:column>
+                        <f:facet name="header">Xóa</f:facet>
+                        <a4j:commandButton class="btn btn-default" value="Xóa" execute="@this" resetValues="true" 
+                                           action="#{userBean.GetUser(user)}"
+                                           oncomplete="#{rich:component('confirmPane')}.show()"> 
+
+                        </a4j:commandButton>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller page="#{userBean.page}" fastStep="3"/>
+                    </f:facet>
+                </rich:dataTable>
+            </h:form>
+            <h:form>
+                <rich:popupPanel id="confirmPane" autosized="true">
+                    <f:facet name="header">
+                        <h:outputText value="Xóa nhân viên" />
+                    </f:facet>
+                    <f:facet name="controls">
+                        <h:outputLink value="#" onclick="#{rich:component('confirmPane')}.hide(); return false;" style="color: inherit">
+                            X
+                        </h:outputLink>
+                    </f:facet>
+
+                    Bạn có muốn xóa nhân viên này không?
+                    <a4j:commandButton value="Không" onclick="#{rich:component('confirmPane')}.hide(); return false;" />
+                    <a4j:commandButton value="Có" action="#{userBean.RemoveUser()}"
+                                       render="tableUser" execute="confirmPane"
+                                       oncomplete="if (#{facesContext.validationFailed==false}) 
+                                       #{rich:component('confirmPane')}.hide();"/>
+                </rich:popupPanel>
+            </h:form>
+            <h:form>
+                <rich:popupPanel id="popupUpdateUser"  domElementAttachment="parent" autosized="true" resizeable="false">
+                    <f:facet name="header">
+                        <h:outputText value="Cập nhật" />
+                    </f:facet>
+                    <f:facet name="controls">
+                        <h:outputLink value="#" onclick="#{rich:component('popupUpdateUser')}.hide(); return false;" style="color: inherit">
+                            X
+                        </h:outputLink>
+                    </f:facet>                   
+                    <center>
+                        <h1 class="form-title-product">Cập nhật</h1>
+                        <h:panelGrid columns="3" class="panel-collapse" id="addUserGrid">
+                            <div class="form-group">
+                                <label class="form-label-product">Mật khẩu mới:</label>
+                                <div class="col-md-10">
+                                    <h:inputSecret id="password" required="true" validatorMessage="Mật khẩu không hợp lệ! " requiredMessage="Mật khẩu là bắt buộc phải nhập!" value="#{userBean.user.password}" class= "form-control"/>
+                                    <rich:message id="passwordMsg" for="password" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label-product">Nhân viên:</label>
+                                <div class="col-md-10">
+                                    <h:selectOneMenu id="employee" value="#{userBean.user.employeeId.employeeId}" class="input">
+                                        <f:selectItems value="#{userBean.listEmployee}" />
+                                    </h:selectOneMenu>
+                                    <rich:message id="employeeMsg" for="employee" />
+                                </div>
+                            </div>
+                        </h:panelGrid>
+                        <br></br><br></br>
+
+                        <a4j:commandButton value="Cập nhật" action="#{userBean.EditUser()}"  class="btn btn-default" render="tableUser" execute="popupUpdateUser"
+                                           oncomplete="if (#{facesContext.validationFailed==false}) 
+                                           #{rich:component('popupUpdateUser')}.hide();">
+                        </a4j:commandButton>
+                        <h:commandButton style="margin-left: 25px" value="Hủy bỏ"  onclick="#{rich:component('popupUpdateUser')}.hide(); return false;" class="btn btn-default"/>
+                        <br></br>
+                    </center>
+
+                </rich:popupPanel>
+            </h:form>
+
+            <rich:popupPanel id="popupAddUser" modal="false" autosized="true" resizeable="false">
+                <f:facet name="header">
+                    <h:outputText value="Thêm mới nhân viên" />
+                </f:facet>
+                <f:facet name="controls">
+                    <h:outputLink value="#" onclick="#{rich:component('popupAddUser')}.hide(); return false;" style="color: inherit">
+                        X
+                    </h:outputLink>
+                </f:facet>
+                <center>
+                    <h:form>
+                        <h1 class="form-title-product"> Thêm mới nhân viên</h1>
+                        <h:panelGrid columns="3" class="panel-collapse" id="addUserGrid">
+                            <div class="form-group">
+                                <label class="form-label-product">Tài khoản:</label>
+                                <div class="col-md-10">
+                                    <h:inputText id="userAccount" required="true" validatorMessage="Tài khoản không hợp lệ! " requiredMessage="Tài khoản là bắt buộc phải nhập!" value="#{userBean.newUser.userAccount}" class= "form-control"/>
+                                    <rich:message id="userAccountMsg" for="userAccount" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label-product">Mật khẩu:</label>
+                                <div class="col-md-10">
+                                    <h:inputSecret id="userAddress" required="true" validatorMessage="Mật khẩu! " requiredMessage="Mật khẩu là bắt buộc phải nhập!" value="#{userBean.newUser.password}" class= "form-control"/>
+                                    <rich:message id="userAddressMsg" for="userAddress" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label-product">Xác nhận mật khẩu:</label>
+                                <div class="col-md-10">
+                                    <h:inputSecret id="confirmPassword" required="true" validator="#{userBean.validateSamePassword()}" requiredMessage="Điện thoại là bắt buộc phải nhập!" value="#{userBean.confirmPassword}" class= "form-control"/>
+                                    <rich:message id="confirmPasswordMsg" for="confirmPassword" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label-product">Nhân viên:</label>
+                                <div class="col-md-10">
+                                    <h:selectOneMenu id="employee" value="#{userBean.newUser.employeeId.employeeId}" class="input">
+                                        <f:selectItems value="#{userBean.listEmployee}" />
+                                    </h:selectOneMenu>
+                                    <rich:message id="employeeMsg" for="employee" />
+                                </div>
+                            </div>
+                        </h:panelGrid>
+                        <br></br><br></br>
+
+                        <a4j:commandButton value="Thêm mới" action="#{userBean.AddUser()}"  class="btn btn-default" 
+                                           render="tableUser" execute="popupAddUser"
+                                           oncomplete="if (#{facesContext.validationFailed==false})  {#{rich:component('popupAddUser')}.hide();}" />
+
+                        <h:commandButton style="margin-left: 25px" value="Hủy bỏ"  onclick="#{rich:component('popupAddUser')}.hide(); return false;" class="btn btn-default"/>
+
+                    </h:form>
+                </center>
+            </rich:popupPanel>
+        </ui:define>
+    </ui:composition>
+
+
+</html>

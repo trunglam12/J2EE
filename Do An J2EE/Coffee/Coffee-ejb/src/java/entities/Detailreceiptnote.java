@@ -30,7 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Detailreceiptnote.findByReceiptNoteId", query = "SELECT d FROM Detailreceiptnote d WHERE d.detailreceiptnotePK.receiptNoteId = :receiptNoteId"),
     @NamedQuery(name = "Detailreceiptnote.findByProductId", query = "SELECT d FROM Detailreceiptnote d WHERE d.detailreceiptnotePK.productId = :productId"),
     @NamedQuery(name = "Detailreceiptnote.findByPrice", query = "SELECT d FROM Detailreceiptnote d WHERE d.price = :price"),
-    @NamedQuery(name = "Detailreceiptnote.findByCount", query = "SELECT d FROM Detailreceiptnote d WHERE d.count = :count")})
+    @NamedQuery(name = "Detailreceiptnote.findByCount", query = "SELECT d FROM Detailreceiptnote d WHERE d.count = :count"),
+    @NamedQuery(name = "Detailreceiptnote.findByReceiptnoteIdAndProductId", query = "SELECT d FROM Detailreceiptnote d WHERE d.detailreceiptnotePK = :receiptnoteId AND d.product.productId = :productId"),})
 public class Detailreceiptnote implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId

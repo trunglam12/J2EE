@@ -6,11 +6,14 @@
 package SessionBean;
 
 import entities.Receiptnote;
+import java.util.Date;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -34,4 +37,18 @@ public class ReceiptnoteFacade extends AbstractFacade<Receiptnote> {
         super(Receiptnote.class);
     }
     
+        public List<Receiptnote> GetRecipeNoteByDate(Date date){
+        Query query = getEntityManager().createNamedQuery("Receiptnote.findByDate");
+        query.setParameter("date", date);
+        List<Receiptnote> result = query.getResultList();
+        return result;
+    }
+    
+    public List<Receiptnote> GetRecipeNoteByMonth(int month, int year){
+        Query query = getEntityManager().createNamedQuery("Receiptnote.findByMonth");
+        query.setParameter("month", month);
+        query.setParameter("year", year);
+        List<Receiptnote> result = query.getResultList();
+        return result;
+    }
 }

@@ -90,10 +90,7 @@
                                                     <h:commandLink action="/Report/ProductReport?faces-redirect=true" value="Báo cáo sản phẩm"/>
                                                 </li>
                                                 <li>
-                                                    <a href="#">Typography</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Icons</a>
+                                                    <h:commandLink action="/Report/ImportReport?faces-redirect=true" value="Báo cáo nhập hàng"/>
                                                 </li>
                                             </ul>
                                         </li>
@@ -103,43 +100,16 @@
                                     <h3>System</h3>
                                     <ul class="nav side-menu">
                                         <li>
-                                            <a><i class="fa fa-users"></i> Authorize <span class="fa fa-chevron-down"></span></a>
+                                            <a><i class="fa fa-users"></i> Phân Quyền <span class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
                                                 <li>
                                                     <h:commandLink action="/Employee/EmployeeManagement?faces-redirect=true" value="Quản lý nhân viên"/>
                                                 </li>
                                                 <li>
-                                                    <a href="#">Contacts</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Profile</a>
+                                                    <h:commandLink action="/User/UserManagement?faces-redirect=true" value="Quản lý người dùng"/>
                                                 </li>
                                             </ul>
                                         </li>     
-                                        <li>
-                                            <a><i class="fa fa-sitemap"></i> Multilevel Menu <span class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-                                                <li><a href="#level1_1">Level One</a>
-                                                    <li>
-                                                        <a>Level One<span class="fa fa-chevron-down"></span></a>
-                                                        <ul class="nav child_menu">
-                                                            <li class="sub_menu">
-                                                                <a href="level2.html">Level Two</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#level2_1">Level Two</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#level2_2">Level Two</a>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#level1_2">Level One</a>
-                                                    </li>
-                                                </li>
-                                            </ul>
-                                        </li>
                                         <li>
                                             <a href="javascript:void(0)"><i class="fa fa-laptop"></i> Landing Page <span class="label label-success pull-right">Coming Soon</span></a>
                                         </li>
@@ -175,7 +145,7 @@
                                 <ul class="nav navbar-nav navbar-right">
                                     <li class="">
                                         <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                            <h:graphicImage library="images" name="avatar.jpg" /> Name
+                                            <h:graphicImage library="images" name="avatar.jpg" /> #{session.getAttribute("user")}
                                             <span class=" fa fa-angle-down"></span>
                                         </a>
                                         <ul class="dropdown-menu dropdown-usermenu pull-right">
